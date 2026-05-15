@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import wishlist from "../images/wishlist.svg";
@@ -11,7 +11,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { getAProduct } from "../features/products/productSlilce";
 import { getuserProductWishlist, getUserCart } from "../features/user/userSlice";
-import { getAuthConfig, getStoredCustomer } from "../utils/axiosConfig";
+import { getAuthConfig } from "../utils/axiosConfig";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -25,13 +25,9 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const customerToken = getStoredCustomer()?.token || "";
-
-  const config2 = useMemo(() => getAuthConfig(), [customerToken]);
-
   useEffect(() => {
     if (authState?.user) {
-      if (!cartState) dispatch(getUserCart(config2));
+      if (!cartState) dispatch(getUserCart(getAuthConfig()));
       if (!wishlistState) dispatch(getuserProductWishlist());
     } else {
       setTotal(0);
@@ -43,7 +39,7 @@ const Header = () => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [authState?.user, cartState, config2, dispatch, wishlistState]);
+  }, [authState?.user, cartState, dispatch, wishlistState]);
 
   const [productOpt, setProductOpt] = useState([]);
   useEffect(() => {

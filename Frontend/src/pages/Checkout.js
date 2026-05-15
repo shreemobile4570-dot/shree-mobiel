@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 import { toast } from "react-toastify";
@@ -39,7 +39,7 @@ const Checkout = () => {
   const payableAmount = totalAmount + shippingCost;
 
   const storedCustomer = getStoredCustomer();
-  const config2 = getAuthConfig();
+  const config2 = useMemo(() => getAuthConfig(), []);
 
   useEffect(() => {
     let sum = 0;
@@ -51,7 +51,7 @@ const Checkout = () => {
 
   useEffect(() => {
     dispatch(getUserCart(config2));
-  }, [dispatch]);
+  }, [dispatch, config2]);
 
   useEffect(() => {
     if (

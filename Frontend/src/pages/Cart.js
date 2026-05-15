@@ -172,7 +172,7 @@
 
 
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
 import watch from "../images/watch.jpg";
@@ -185,15 +185,10 @@ import {
   getUserCart,
   updateCartProduct,
 } from "../features/user/userSlice";
-import { getAuthConfig, getStoredCustomer } from "../utils/axiosConfig";
+import { getAuthConfig } from "../utils/axiosConfig";
 
 const Cart = () => {
-  const customerToken = getStoredCustomer()?.token || "";
-
-  const config2 = useMemo(
-    () => getAuthConfig(),
-    [customerToken]
-  );
+  const [config2] = useState(() => getAuthConfig());
 
   const dispatch = useDispatch();
 
@@ -221,7 +216,7 @@ const Cart = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [config2, productupdateDetail, dispatch]);
+  }, [productupdateDetail, dispatch]);
 
   // Delete item
   const deleteACartProduct = async (id) => {

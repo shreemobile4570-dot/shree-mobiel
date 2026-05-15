@@ -12,11 +12,8 @@ const Blog = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    getblogs();
-  }, []);
-  const getblogs = () => {
     dispatch(getAllBlogs());
-  };
+  }, [dispatch]);
 
   return (
     <>

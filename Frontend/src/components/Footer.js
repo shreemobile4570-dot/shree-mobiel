@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BsLinkedin, BsGithub, BsYoutube, BsInstagram } from "react-icons/bs";
+import { BsInstagram } from "react-icons/bs";
 import newsletter from "../images/newsletter.png";
 
 const Footer = () => {
@@ -52,7 +52,15 @@ const Footer = () => {
                   Your destination for premium women's fashion. Curated styles for the modern woman who embraces elegance.
                 </p>
                 <div className="social-links">
-                  <a href="#" className="social-link"><BsInstagram /></a>
+                  <a
+                    href="https://www.instagram.com/"
+                    className="social-link"
+                    aria-label="Instagram"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <BsInstagram />
+                  </a>
                
                   
                   

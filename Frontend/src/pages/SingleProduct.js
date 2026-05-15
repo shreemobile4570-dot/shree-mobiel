@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
@@ -33,9 +33,8 @@ const SingleProduct = () => {
   const cartState = useSelector((state) => state?.auth?.cartProducts);
   const authLoading = useSelector((state) => state?.auth?.isLoading);
   const productLoading = useSelector((state) => state?.product?.isLoading);
-  const wishlistState = useSelector((state) => state?.auth?.wishlist?.wishlist);
   const isLoggedIn = Boolean(getStoredCustomer()?.token);
-  const productImages = productState?.images || [];
+  const productImages = useMemo(() => productState?.images || [], [productState?.images]);
   const reviewCount = productState?.ratings?.length || 0;
   const averageRating = reviewCount
     ? productState.ratings.reduce(
@@ -422,7 +421,7 @@ const SingleProduct = () => {
                 </div>
                 {orderedProduct && (
                   <div>
-                    <a className="text-dark text-decoration-underline" href="">
+                    <a className="text-dark text-decoration-underline" href="#review">
                       Write a Review
                     </a>
                   </div>
@@ -472,7 +471,7 @@ const SingleProduct = () => {
                 {productState &&
                   productState.ratings?.map((item, index) => {
                     return (
-                      <div className="review">
+                      <div className="review" key={item?._id || index}>
                         <div className="d-flex gap-10 align-items-center">
                           <h6 className="mb-0">user</h6>
                           <ReactStars

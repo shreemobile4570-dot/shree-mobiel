@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
 import { blogService } from "./blogService";
 
 export const getAllBlogs = createAsyncThunk("blogs/get", async (thunkAPI) => {

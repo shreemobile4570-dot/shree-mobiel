@@ -1,7 +1,7 @@
 import React from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Container from "../components/Container";
 import CustomInput from "../components/CustomInput";
 import { useFormik } from "formik";
@@ -17,7 +17,6 @@ let emailSchema = yup.object({
 });
 
 const Forgotpassword = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state?.auth?.isLoading);
 
