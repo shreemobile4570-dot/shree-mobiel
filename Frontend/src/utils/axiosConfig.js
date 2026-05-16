@@ -1,6 +1,10 @@
 const rawBaseUrl = process.env.REACT_APP_BASE_URL || "";
 
-export const base_url = rawBaseUrl.endsWith("/") ? rawBaseUrl : `${rawBaseUrl}/`;
+const normalizedBaseUrl = rawBaseUrl.endsWith("/") ? rawBaseUrl : `${rawBaseUrl}/`;
+
+export const base_url = normalizedBaseUrl.endsWith("/api/")
+  ? normalizedBaseUrl
+  : `${normalizedBaseUrl}api/`;
 
 export const getStoredCustomer = () => {
   try {
