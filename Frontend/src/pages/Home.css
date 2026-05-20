@@ -428,7 +428,7 @@
 
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: clamp(14px, 2vw, 24px);
   max-width: 1440px;
   margin: 0 auto;
@@ -437,7 +437,7 @@
 .category-card {
   position: relative;
   min-height: 0;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 5 / 4;
   overflow: hidden;
   cursor: pointer;
   border-radius: 18px;
@@ -498,7 +498,7 @@
 
 .category-content h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: clamp(1rem, 1.4vw, 1.35rem);
+  font-size: clamp(1.12rem, 1.55vw, 1.48rem);
   font-weight: 700;
   margin-bottom: 8px;
   letter-spacing: 0;
@@ -1042,7 +1042,7 @@
   }
   
   .category-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 
   .category-card {
@@ -1088,7 +1088,7 @@
   }
 
   .category-content h3 {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .category-link {

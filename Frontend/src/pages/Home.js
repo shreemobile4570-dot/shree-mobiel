@@ -14,7 +14,7 @@ import {
   BsThreeDots,
   BsTruck,
 } from "react-icons/bs";
-import heroImage from "../images/accessories.jpg";
+import heroImage from "../images/heroimage.png";
 import { getRolePrice } from "../utils/price";
 import accessoriesImage from "../images/accessories.jpg";
 import sparePartsImage from "../images/spareparts.jpg";
@@ -312,9 +312,6 @@ const categories = [
         <img src={cat.image} alt={cat.name} />
       </div>
       <div className="category-content">
-        <span className="category-type">
-          {cat.filterType === "tag" ? "Collection" : "Category"}
-        </span>
         <h3>{cat.name}</h3>
         <span className="category-link">
           Explore <span>→</span>
