@@ -29,6 +29,7 @@ import NewArrivals from "./pages/NewArrivals";
 import Accessories from "./pages/Accessories";
 import SpareParts from "./pages/SpareParts";
 import Covers from "./pages/Covers";
+import ProductCategory from "./pages/ProductCategory";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
             <Route path="accessories" element={<Accessories />} />
             <Route path="spare-parts" element={<SpareParts />} />
             <Route path="covers" element={<Covers />} />
+            <Route path="category/:categorySlug" element={<ProductCategory />} />
             <Route path="product/:id" element={<SingleProduct />} />
             <Route path="blogs" element={<Blog />} />
             <Route path="blog/:id" element={<SingleBlog />} />

@@ -14,8 +14,24 @@ import {
   BsThreeDots,
   BsTruck,
 } from "react-icons/bs";
-import heroImage from "../images/heroimage.png";
+import heroImage from "../images/accessories.jpg";
 import { getRolePrice } from "../utils/price";
+import accessoriesImage from "../images/accessories.jpg";
+import sparePartsImage from "../images/spareparts.jpg";
+import displayImage from "../images/displaycat.png";
+import batteryImage from "../images/battery.jpg";
+import chargingBoardImage from "../images/charging board.jpg";
+import backPanelImage from "../images/back panel.jpg";
+import cameraGlassImage from "../images/cameraglass.jpg";
+import screenProtectorsImage from "../images/screen protectors.jpg";
+import chargerImage from "../images/charger.jpg";
+import earphoneImage from "../images/earphone.jpg";
+import earbudsImage from "../images/earbuds.jpg";
+import headphonesImage from "../images/headphones.jpg";
+import neckBandImage from "../images/neck band.jpg";
+import powerbankImage from "../images/powerbank.jpg";
+import simTrayImage from "../images/simtray.jpg";
+import stripsImage from "../images/volume and power strips.jpg";
 import "./Home.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -129,12 +145,36 @@ const Home = () => {
     return () => ctx.revert();
   }, [dispatch]);
 
+const categorySlug = (name) =>
+  name
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 const categories = [
-  { name: "Accessories", image: "/images/cat-4.jpg", path: "/accessories" },
-  { name: "Spare Parts", image: "/images/cat-1.jpg", path: "/spare-parts" },
-  { name: "Covers", image: "/images/cat-2.jpg", path: "/covers" },
-  { name: "All Products", image: "/images/cat-3.jpg", path: "/product" }
-];
+  { name: "New Arrivals", image: chargerImage, path: "/new-arrivals", filterType: "tag" },
+  { name: "Accessories", image: accessoriesImage, path: "/accessories", filterType: "tag" },
+  { name: "Spare Parts", image: sparePartsImage, path: "/spare-parts", filterType: "tag" },
+  { name: "Covers", image: screenProtectorsImage, path: "/covers", filterType: "tag" },
+  { name: "Display & Touch", image: displayImage },
+  { name: "Battery", image: batteryImage },
+  { name: "Charging Board", image: chargingBoardImage },
+  { name: "Back Panel", image: backPanelImage },
+  { name: "Camera Glass", image: cameraGlassImage },
+  { name: "Screen Protectors", image: screenProtectorsImage },
+  { name: "Charger", image: chargerImage },
+  { name: "Earphone", image: earphoneImage },
+  { name: "Earbuds", image: earbudsImage },
+  { name: "Headphones", image: headphonesImage },
+  { name: "Neck Band", image: neckBandImage },
+  { name: "Powerbank", image: powerbankImage },
+  { name: "Sim Tray", image: simTrayImage },
+  { name: "Volume And Power Strips", image: stripsImage },
+].map((item) => ({
+  ...item,
+  path: item.path || `/category/${categorySlug(item.name)}`,
+}));
 
   return (
     <div className={`home-page ${isLoaded ? 'loaded' : ''}`}>
@@ -272,6 +312,9 @@ const categories = [
         <img src={cat.image} alt={cat.name} />
       </div>
       <div className="category-content">
+        <span className="category-type">
+          {cat.filterType === "tag" ? "Collection" : "Category"}
+        </span>
         <h3>{cat.name}</h3>
         <span className="category-link">
           Explore <span>→</span>
