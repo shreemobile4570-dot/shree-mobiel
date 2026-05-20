@@ -40,13 +40,62 @@ function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
-            <Route path="product" element={<OurStore />} />
-            <Route path="new-arrivals" element={<NewArrivals />} />
-            <Route path="accessories" element={<Accessories />} />
-            <Route path="spare-parts" element={<SpareParts />} />
-            <Route path="covers" element={<Covers />} />
-            <Route path="category/:categorySlug" element={<ProductCategory />} />
-            <Route path="product/:id" element={<SingleProduct />} />
+            <Route
+              path="product"
+              element={
+                <PrivateRoutes>
+                  <OurStore />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="new-arrivals"
+              element={
+                <PrivateRoutes>
+                  <NewArrivals />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="accessories"
+              element={
+                <PrivateRoutes>
+                  <Accessories />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="spare-parts"
+              element={
+                <PrivateRoutes>
+                  <SpareParts />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="covers"
+              element={
+                <PrivateRoutes>
+                  <Covers />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="category/:categorySlug"
+              element={
+                <PrivateRoutes>
+                  <ProductCategory />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="product/:id"
+              element={
+                <PrivateRoutes>
+                  <SingleProduct />
+                </PrivateRoutes>
+              }
+            />
             <Route path="blogs" element={<Blog />} />
             <Route path="blog/:id" element={<SingleBlog />} />
             <Route

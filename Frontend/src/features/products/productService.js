@@ -1,24 +1,32 @@
 import axios from "axios";
-import { base_url, getAuthConfig } from "../../utils/axiosConfig";
+import { base_url, getAuthConfig, getStoredCustomer } from "../../utils/axiosConfig";
 
-const cache = new Map();
-const PRODUCT_CACHE_MS = 60 * 1000;
+const requireCustomerToken = () => {
+  const customer = getStoredCustomer();
+  if (customer?.token) return true;
 
-const getCached = (key) => {
-  const cached = cache.get(key);
-  if (!cached || cached.expiresAt < Date.now()) {
-    cache.delete(key);
-    return null;
+  localStorage.removeItem("customer");
+  localStorage.removeItem("token");
+  if (window.location.pathname !== "/login") {
+    window.location.assign("/login");
   }
-  return cached.data;
+  return false;
 };
 
-const setCached = (key, data, ttl = PRODUCT_CACHE_MS) => {
-  cache.set(key, { data, expiresAt: Date.now() + ttl });
-  return data;
+const handleProductAuthError = (error) => {
+  if ([401, 403].includes(error?.response?.status)) {
+    localStorage.removeItem("customer");
+    localStorage.removeItem("token");
+    if (window.location.pathname !== "/login") {
+      window.location.assign("/login");
+    }
+  }
+  throw error;
 };
 
 const getProducts = async (data) => {
+  if (!requireCustomerToken()) return [];
+
   const params = new URLSearchParams();
 
   if (data?.brand) params.append("brand", data.brand);
@@ -35,25 +43,23 @@ const getProducts = async (data) => {
   if (data?.page) params.append("page", data.page);
   if (data?.fields) params.append("fields", data.fields);
 
-  const cacheKey = `products:${params.toString()}`;
-  const cached = getCached(cacheKey);
-  if (cached) return cached;
-
-  const response = await axios.get(`${base_url}product?${params.toString()}`);
+  const response = await axios
+    .get(`${base_url}product?${params.toString()}`, getAuthConfig())
+    .catch(handleProductAuthError);
 
   if (response.data) {
-    return setCached(cacheKey, response.data);
+    return response.data;
   }
 };
 
 const getSingleProduct = async (id) => {
-  const cacheKey = `product:${id}`;
-  const cached = getCached(cacheKey);
-  if (cached) return cached;
+  if (!requireCustomerToken()) return null;
 
-  const response = await axios.get(`${base_url}product/${id}`);
+  const response = await axios
+    .get(`${base_url}product/${id}`, getAuthConfig())
+    .catch(handleProductAuthError);
   if (response.data) {
-    return setCached(cacheKey, response.data);
+    return response.data;
   }
 };
 

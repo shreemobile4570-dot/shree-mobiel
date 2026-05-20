@@ -15,6 +15,7 @@ import {
   BsTruck,
 } from "react-icons/bs";
 import heroImage from "../images/heroimage.png";
+import { getStoredCustomer } from "../utils/axiosConfig";
 import { getRolePrice } from "../utils/price";
 import accessoriesImage from "../images/accessories.jpg";
 import sparePartsImage from "../images/spareparts.jpg";
@@ -48,18 +49,21 @@ const Home = () => {
   const navigate = useNavigate();
 
   const productState = useSelector((state) => state?.product?.product);
+  const isLoggedIn = Boolean(getStoredCustomer()?.token);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
     // Page load transition
     setTimeout(() => setIsLoaded(true), 100);
 
-    dispatch(
-      getAllProducts({
-        limit: 8,
-        fields: "title,brand,price,wholesellerPrice,retailerPrice,images,quantity,createdAt",
-      })
-    );
+    if (isLoggedIn) {
+      dispatch(
+        getAllProducts({
+          limit: 8,
+          fields: "title,brand,price,wholesellerPrice,retailerPrice,images,quantity,createdAt",
+        })
+      );
+    }
 
     // Hero Content Animation (on load)
     gsap.fromTo(heroRef.current.querySelectorAll(".hero-content > *"), 
@@ -143,7 +147,22 @@ const Home = () => {
     }, heroRef);
 
     return () => ctx.revert();
-  }, [dispatch]);
+  }, [dispatch, isLoggedIn]);
+
+  useEffect(() => {
+    if (!isLoggedIn) return undefined;
+
+    const refreshProducts = () =>
+      dispatch(
+        getAllProducts({
+          limit: 8,
+          fields: "title,brand,price,wholesellerPrice,retailerPrice,images,quantity,createdAt",
+        })
+      );
+
+    const stockRefresh = setInterval(refreshProducts, 15000);
+    return () => clearInterval(stockRefresh);
+  }, [dispatch, isLoggedIn]);
 
 const categorySlug = (name) =>
   name
@@ -343,7 +362,7 @@ const categories = [
         </div>
         
         <div className="product-grid">
-          {productState && productState.slice(0, 8).map((item, index) => {
+          {isLoggedIn && productState && productState.slice(0, 8).map((item, index) => {
             const displayPrice = getRolePrice(item);
             return (
             <div 
@@ -372,6 +391,13 @@ const categories = [
             </div>
             );
           })}
+          {!isLoggedIn && (
+            <div className="product-login-card">
+              <h3>Login to browse products</h3>
+              <p>Product stock and wholesale pricing are available after login.</p>
+              <Link to="/login" className="view-all-btn">Login Now</Link>
+            </div>
+          )}
         </div>
         
         <div className="view-all-wrapper">
