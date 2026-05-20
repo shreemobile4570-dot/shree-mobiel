@@ -418,6 +418,7 @@ export const authSlice = createSlice({
             lastname: action?.payload?.lastname,
             email: action?.payload?.email,
             mobile: action?.payload?.mobile,
+            role: action?.payload?.role || currentUserData?.role || "user",
           };
           localStorage.setItem("customer", JSON.stringify(newUserData));
           state.user = newUserData;

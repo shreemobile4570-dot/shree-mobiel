@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToWishlist } from "../features/products/productSlilce";
 import { getuserProductWishlist } from "../features/user/userSlice";
 import { Link } from "react-router-dom";
+import { getRolePrice } from "../utils/price";
 const Wishlist = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -56,7 +57,7 @@ const Wishlist = () => {
                       </div>
                       <div className="wishlist-card-copy">
                       <h5 className="title">{item?.title}</h5>
-                      <h6 className="price">Rs. {item?.price}</h6>
+                      <h6 className="price">Rs. {getRolePrice(item)}</h6>
                       </div>
                     </Link>
                 </div>

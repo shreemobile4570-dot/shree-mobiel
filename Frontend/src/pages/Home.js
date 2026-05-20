@@ -15,6 +15,7 @@ import {
   BsTruck,
 } from "react-icons/bs";
 import heroImage from "../images/heroimage.png";
+import { getRolePrice } from "../utils/price";
 import "./Home.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -40,7 +41,7 @@ const Home = () => {
     dispatch(
       getAllProducts({
         limit: 8,
-        fields: "title,brand,price,images,createdAt",
+        fields: "title,brand,price,wholesellerPrice,retailerPrice,images,createdAt",
       })
     );
 
@@ -302,7 +303,9 @@ const categories = [
         </div>
         
         <div className="product-grid">
-          {productState && productState.slice(0, 8).map((item, index) => (
+          {productState && productState.slice(0, 8).map((item, index) => {
+            const displayPrice = getRolePrice(item);
+            return (
             <div 
               key={index} 
               className="premium-card"
@@ -316,8 +319,8 @@ const categories = [
                 <span className="card-brand">{item?.brand}</span>
                 <h5 className="card-title">{item?.title?.substring(0, 40)}...</h5>
                 <div className="card-price">
-                  <span className="current-price">₹ {item?.price}</span>
-                  <span className="original-price">₹ {Math.round(item?.price * 1.3)}</span>
+                  <span className="current-price">₹ {displayPrice}</span>
+                  <span className="original-price">₹ {Math.round(displayPrice * 1.3)}</span>
                   <span className="discount">-30%</span>
                 </div>
               </div>
@@ -326,7 +329,8 @@ const categories = [
                 <button className="action-btn">Add to Cart</button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
         
         <div className="view-all-wrapper">

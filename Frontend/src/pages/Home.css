@@ -1457,3 +1457,6 @@
     min-height: 66px;
   }
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

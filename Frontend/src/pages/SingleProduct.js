@@ -16,6 +16,7 @@ import {
 import { toast } from "react-toastify";
 import { addProdToCart, getuserProductWishlist, getUserCart } from "../features/user/userSlice";
 import { getStoredCustomer } from "../utils/axiosConfig";
+import { getRolePrice } from "../utils/price";
 import LoadingOverlay from "../components/LoadingOverlay";
 
 const SingleProduct = () => {
@@ -35,6 +36,7 @@ const SingleProduct = () => {
   const productLoading = useSelector((state) => state?.product?.isLoading);
   const isLoggedIn = Boolean(getStoredCustomer()?.token);
   const productImages = useMemo(() => productState?.images || [], [productState?.images]);
+  const displayPrice = getRolePrice(productState);
   const reviewCount = productState?.ratings?.length || 0;
   const averageRating = reviewCount
     ? productState.ratings.reduce(
@@ -60,7 +62,7 @@ const SingleProduct = () => {
         getAllProducts({
           tag: "popular",
           limit: 8,
-          fields: "title,brand,price,images,tags",
+          fields: "title,brand,price,wholesellerPrice,retailerPrice,images,tags",
         })
       );
     }, 250);
@@ -112,7 +114,6 @@ const SingleProduct = () => {
           quantity,
           color,
           size,
-          price: productState?.price,
         })
       );
       navigate("/cart");
@@ -211,7 +212,7 @@ const SingleProduct = () => {
                 <h3 className="title">{productState?.title}</h3>
               </div>
               <div className="border-bottom py-3">
-                <p className="price"> Rs. {productState?.price}/-</p>
+                <p className="price"> Rs. {displayPrice}/-</p>
                 <div className="d-flex align-items-center gap-10">
                   <ReactStars
                     count={5}

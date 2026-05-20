@@ -10,6 +10,7 @@ import { addToWishlist } from "../features/products/productSlilce";
 import { getuserProductWishlist } from "../features/user/userSlice";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useState } from "react";
+import { getRolePrice } from "../utils/price";
 
 const ProductCard = (props) => {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ const ProductCard = (props) => {
   <>
     {data?.map((item, index) => {
       const isWishlist = isProductInWishlist(item._id);
+      const displayPrice = getRolePrice(item);
 
       return (
         <div
@@ -107,7 +109,7 @@ const ProductCard = (props) => {
                 className="cart border-0 bg-transparent"
                 onClick={() => navigate("/product/" + item?._id)}
               >
-                <span className="price">₹{item?.price}</span>
+                <span className="price">₹{displayPrice}</span>
 
                 <span className="add-to-cart">
                   <span className="txt">View Product</span>
