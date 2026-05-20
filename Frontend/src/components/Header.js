@@ -218,10 +218,9 @@ const Header = () => {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/product">Shop</Link></li>
                 <li><Link to="/new-arrivals">New Arrivals</Link></li>
-                <li><Link to="/dresses">Dresses</Link></li>
-                <li><Link to="/jeans">Jeans</Link></li>
-                <li><Link to="/ethnic-wear">Ethnic Wear</Link></li>
                 <li><Link to="/accessories">Accessories</Link></li>
+                <li><Link to="/spare-parts">Spare Parts</Link></li>
+                <li><Link to="/covers">Covers</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
                 <li><Link to="/my-orders">My Orders</Link></li>
               </ul>

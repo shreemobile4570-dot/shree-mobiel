@@ -4,7 +4,7 @@ import CategoryCollectionPage from "./CategoryCollectionPage";
 const Accessories = () => (
   <CategoryCollectionPage
     title="Accessories"
-    category="Accessories"
+    tag="accessories"
     emptyMessage="No accessories are available right now."
   />
 );

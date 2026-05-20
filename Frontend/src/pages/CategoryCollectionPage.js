@@ -32,7 +32,7 @@ const CategoryCollectionPage = ({
 
   return (
     <>
-      <Meta title={`${title} | Rivaa Collections`} />
+      <Meta title={`${title} | Shree Mobile`} />
       <div className="store-page-wrapper">
         <BreadCrumb title={title} />
 

@@ -58,17 +58,17 @@ const Contact = () => {
       <Container class1="contact-wrapper py-5 home-wrapper-2 premium-contact-page">
         <div className="contact-page-shell">
           <div className="contact-page-heading">
-            <span>Rivaa Collection</span>
+            <span>Shree Mobile</span>
             <h1>Contact Us</h1>
             <p>
-              Need help with an order, sizing, styling, or store visit? Send us
+              Need help with an order, product availability, or store visit? Send us
               a message and our team will get back to you as soon as possible.
             </p>
           </div>
 
           <div className="contact-map-panel">
             <iframe
-              title="Rivaa Collection store location"
+              title="Shree Mobile store location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121660.28119135296!2d75.80589811180636!3d17.655662324508146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc5d082b54ac5d5%3A0x3c719de6c83710d0!2sSolapur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1777805021893!5m2!1sen!2sin"
               className="contact-map"
               allowFullScreen=""
@@ -167,7 +167,7 @@ const Contact = () => {
               <h3 className="contact-title">Store Details</h3>
               <p className="contact-panel-copy">
                 We are available all week for product questions, order support,
-                and collection enquiries.
+                and wholesale enquiries.
               </p>
               <ul className="ps-0">
                 <li className="contact-detail-card">

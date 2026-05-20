@@ -50,11 +50,11 @@ const Signup = () => {
       <Container class1="login-wrapper py-5 home-wrapper-2">
         <div className="auth-shell">
           <div className="auth-intro-panel">
-            <span className="auth-kicker">Rivaa Collections</span>
+            <span className="auth-kicker">Shree Mobile</span>
             <h1>Create Your Account</h1>
             <p>
-              Join Rivaa Collections to save your details, build your wishlist,
-              and shop new looks with a smoother checkout.
+              Join Shree Mobile to save your details, build your wishlist,
+              and order wholesale mobile products with a smoother checkout.
             </p>
           </div>
           <div className="auth-form-panel">

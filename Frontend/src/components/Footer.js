@@ -45,11 +45,11 @@ const Footer = () => {
             <div className="col-lg-3 col-md-6 col-12">
               <div className="footer-brand-col">
                 <Link to="/" className="footer-brand">
-                  <span className="brand-name">RIVAA</span>
-                  <span className="brand-sub">collection</span>
+                  <span className="brand-name">Shree Mobile</span>
+                  <span className="brand-sub">wholesale</span>
                 </Link>
                 <p className="brand-desc">
-                  Your destination for premium women's fashion. Curated styles for the modern woman who embraces elegance.
+                  Wholesale mobile spare parts and accessories for shops, repair centers, and resellers.
                 </p>
                 <div className="social-links">
                   <a
@@ -73,12 +73,11 @@ const Footer = () => {
               <div className="footer-links-col">
                 <h4>Shop</h4>
                 <ul className="footer-links">
-                  <li><Link to="/product">New Arrivals</Link></li>
+                  <li><Link to="/new-arrivals">New Arrivals</Link></li>
                   <li><Link to="/product">Best Sellers</Link></li>
-                  <li><Link to="/product">Dresses</Link></li>
-                  <li><Link to="/product">jeans </Link></li>
-                  <li><Link to="/product">Ethnic Wear</Link></li>
-                  <li><Link to="/product">Accessories</Link></li>
+                  <li><Link to="/accessories">Accessories</Link></li>
+                  <li><Link to="/spare-parts">Spare Parts</Link></li>
+                  <li><Link to="/covers">Covers</Link></li>
                 </ul>
               </div>
             </div>
@@ -106,7 +105,7 @@ const Footer = () => {
                   <li><Link to="/return-policy">Returns</Link></li>
                   <li><Link to="/my-orders">Track Order</Link></li>
                   <li><Link to="/size-guide">Size Guide</Link></li>
-                  <li><Link to="/care">Fabric Care</Link></li>
+                  <li><Link to="/care">Product Care</Link></li>
                 </ul>
               </div>
             </div>
@@ -157,7 +156,7 @@ const Footer = () => {
           <div className="row align-items-center">
             <div className="col-md-6">
               <p className="copyright">
-                © {new Date().getFullYear()} Rivaa collection. All rights reserved.
+                © {new Date().getFullYear()} Shree Mobile. All rights reserved.
               </p>
             </div>
             <div className="col-md-6">

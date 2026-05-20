@@ -190,10 +190,10 @@ const Home = () => {
   }, [dispatch]);
 
 const categories = [
-  { name: "Dresses", image: "/images/cat-1.jpg", path: "/dresses" },
-  { name: "Jeans", image: "/images/cat-2.jpg", path: "/jeans" },
-  { name: "Ethnic Wear", image: "/images/cat-3.jpg", path: "/ethnic-wear" },
-  { name: "Accessories", image: "/images/cat-4.jpg", path: "/accessories" }
+  { name: "Accessories", image: "/images/cat-4.jpg", path: "/accessories" },
+  { name: "Spare Parts", image: "/images/cat-1.jpg", path: "/spare-parts" },
+  { name: "Covers", image: "/images/cat-2.jpg", path: "/covers" },
+  { name: "All Products", image: "/images/cat-3.jpg", path: "/product" }
 ];
 
   return (
@@ -218,27 +218,27 @@ const categories = [
 
         {/* Layer 2 - Mid background */}
         <div className="parallax-layer parallax-layer-2">
-          <img src={heroImage} alt="fashion collection hero" className="layer-image" />
+          <img src={heroImage} alt="mobile accessories wholesale hero" className="layer-image" />
         </div>
 
         {/* Layer 3 - Closer (faster) - Text and floating elements */}
         <div className="parallax-layer parallax-layer-3">
           <div className="hero-text-ribbon ribbon-top" aria-hidden="true">
             <div className="hero-marquee-line line-top">
-              <span>NEW COLLECTION</span>
-              <span>PREMIUM FASHION</span>
-              <span>RIVAA STYLE</span>
-              <span>NEW COLLECTION</span>
-              <span>PREMIUM FASHION</span>
+              <span>NEW STOCK</span>
+              <span>WHOLESALE DEALS</span>
+              <span>MOBILE ACCESSORIES</span>
+              <span>NEW STOCK</span>
+              <span>WHOLESALE DEALS</span>
             </div>
           </div>
           <div className="hero-text-ribbon ribbon-bottom" aria-hidden="true">
             <div className="hero-marquee-line line-bottom">
-              <span>ETHNIC WEAR</span>
-              <span>MODERN ELEGANCE</span>
-              <span>CURATED LOOKS</span>
-              <span>ETHNIC WEAR</span>
-              <span>MODERN ELEGANCE</span>
+              <span>SPARE PARTS</span>
+              <span>COVERS</span>
+              <span>ACCESSORIES</span>
+              <span>SPARE PARTS</span>
+              <span>COVERS</span>
             </div>
           </div>
           <div className="floating-element" style={{ top: '15%', left: '10%' }}>✦</div>
@@ -254,15 +254,15 @@ const categories = [
         
         {/* Hero content */}
         <div className="hero-content">
-          <span className="hero-subtitle">New Collection 2026</span>
-          <h1>Elegance Redefined</h1>
-          <p>Premium styles curated for the modern woman</p>
+          <span className="hero-subtitle">Wholesale Mobile Store</span>
+          <h1>Parts, Covers & Accessories</h1>
+          <p>Bulk mobile products for retailers and repair shops</p>
           <div className="hero-buttons">
             <Link to="/product" className="hero-btn primary">
               Shop Now
             </Link>
             <Link to="/product" className="hero-btn secondary">
-              View Collection
+              View Products
             </Link>
           </div>
         </div>
@@ -311,7 +311,7 @@ const categories = [
         <div className="section-header">
           <span className="section-tag">Browse</span>
           <h2>Shop By Category</h2>
-          <p>Explore our curated collections</p>
+          <p>Explore wholesale mobile products by category</p>
         </div>
         
        <div className="category-grid">
@@ -336,7 +336,7 @@ const categories = [
         <div className="banner-content">
           <span className="section-tag">Limited Time</span>
           <h2>Flat 40% Off</h2>
-          <p>On ethnic wear collection</p>
+          <p>On selected mobile accessories and spare parts</p>
           <Link to="/product" className="hero-btn primary">
             Shop Now
           </Link>
@@ -347,8 +347,8 @@ const categories = [
       <section ref={productsRef} className="product-section">
         <div className="section-header">
           <span className="section-tag">Trending</span>
-          <h2>Featured Collection</h2>
-          <p>Handpicked styles for you</p>
+          <h2>Featured Products</h2>
+          <p>Fresh stock for your shop and service counter</p>
         </div>
         
         <div className="product-grid">
@@ -392,12 +392,12 @@ const categories = [
           <div className="value-card">
             <div className="value-number">01</div>
             <h3>Quality First</h3>
-            <p>Premium fabrics sourced from the finest mills</p>
+            <p>Reliable products sourced for daily wholesale demand</p>
           </div>
           <div className="value-card">
             <div className="value-number">02</div>
-            <h3>Style Expert</h3>
-            <p>Curated by fashion experts worldwide</p>
+            <h3>Wholesale Ready</h3>
+            <p>Useful categories for retailers, resellers, and repair shops</p>
           </div>
           <div className="value-card">
             <div className="value-number">03</div>
@@ -424,14 +424,14 @@ const categories = [
       {/* <footer className="home-footer">
         <div className="footer-content">
           <div className="footer-brand">
-            <h3>Rivaa collection</h3>
-            <p>Your destination for premium women's fashion</p>
+            <h3>Shree Mobile</h3>
+            <p>Wholesale mobile spare parts and accessories</p>
           </div>
           <div className="footer-links">
             <h4>Quick Links</h4>
             <Link to="/product">New Arrivals</Link>
             <Link to="/product">Best Sellers</Link>
-            <Link to="/product">Ethnic Wear</Link>
+            <Link to="/spare-parts">Spare Parts</Link>
             <Link to="/product">Accessories</Link>
           </div>
           <div className="footer-links">
@@ -451,7 +451,7 @@ const categories = [
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2026 Rivaa collection. All rights reserved.</p>
+          <p>© 2026 Shree Mobile. All rights reserved.</p>
         </div>
       </footer> */}
     </div>

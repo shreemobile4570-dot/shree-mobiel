@@ -190,7 +190,7 @@ const Checkout = () => {
         key: "rzp_test_Sk3RL8gKpEuL38",
         amount,
         currency,
-        name: "Rivaa collection",
+        name: "Shree Mobile",
         description: "Order payment",
         order_id,
         handler: async function (response) {

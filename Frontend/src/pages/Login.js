@@ -49,10 +49,10 @@ const Login = () => {
       <Container class1="login-wrapper py-5 home-wrapper-2">
         <div className="auth-shell">
           <div className="auth-intro-panel">
-            <span className="auth-kicker">Rivaa Collections</span>
+            <span className="auth-kicker">Shree Mobile</span>
             <h1>Welcome Back</h1>
             <p>
-              Sign in to continue shopping curated women&apos;s fashion,
+              Sign in to continue shopping mobile spare parts, accessories,
               manage your cart, and keep your wishlist close.
             </p>
           </div>
