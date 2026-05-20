@@ -5,7 +5,7 @@ import wishlist from "../images/wishlist.svg";
 import user from "../images/user.svg";
 import cart from "../images/cart.svg";
 import menu from "../images/menu.svg";
-import strikshamLogo from "../images/strikshamlogo.jpg";
+import shreeLogo from "../images/shreelogo.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
@@ -68,7 +68,7 @@ const Header = () => {
     <>
       {/* Top Info Bar */}
       <div className={`premium-header ${isScrolled ? "scrolled" : ""}`}>
-        <div className="header-top-bar">
+        {/* <div className="header-top-bar">
           <div className="container-xxl">
             <div className="row align-items-center">
               <div className="col-6">
@@ -88,7 +88,7 @@ const Header = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Main Header */}
         <header className="header-main">
@@ -97,8 +97,8 @@ const Header = () => {
               {/* Logo */}
               <div className="header-brand-col">
                 <Link className="brand-logo" to="/">
-                  <img className="brand-logo-img" src={strikshamLogo} alt="Striksham logo" />
-                  <span className="logo-text">Stri Ksham</span>
+                  <img className="brand-logo-img" src={shreeLogo} alt="Shree Mobiles logo" />
+                  <span className="logo-text">Shree Mobiles</span>
                 </Link>
               </div>
 

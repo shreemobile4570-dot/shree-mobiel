@@ -4,7 +4,17 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../features/products/productSlilce";
-import heroImage from "../images/heroimage.jpg";
+import {
+  BsAward,
+  BsBatteryCharging,
+  BsCart3,
+  BsHeadset,
+  BsPhone,
+  BsShieldCheck,
+  BsThreeDots,
+  BsTruck,
+} from "react-icons/bs";
+import heroImage from "../images/heroimage.png";
 import "./Home.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -47,78 +57,7 @@ const Home = () => {
       }
     );
 
-    // Multi-layer Parallax Effect
-    gsap.to(".parallax-layer-1", {
-      yPercent: 18,
-      ease: "none",
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-
-    gsap.to(".parallax-layer-2", {
-      yPercent: 42,
-      ease: "none",
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-
-    gsap.to(".parallax-layer-3", {
-      yPercent: 68,
-      ease: "none",
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-
-    gsap.to(".hero-marquee-line.line-top", {
-      xPercent: -28,
-      ease: "none",
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-
-    gsap.to(".hero-marquee-line.line-bottom", {
-      xPercent: 28,
-      ease: "none",
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-
-    // Floating particles animation
-    gsap.to(".floating-element", {
-      y: "random(-20, 20)",
-      x: "random(-15, 15)",
-      rotation: "random(-10, 10)",
-      duration: "random(3, 5)",
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-      stagger: {
-        each: 0.5,
-        from: "random"
-      }
-    });
-
-    // Category Cards Animation
+  // Category Cards Animation
     gsap.fromTo(".category-card",
       { opacity: 0, y: 80, scale: 0.9 },
       {
@@ -190,8 +129,8 @@ const Home = () => {
   }, [dispatch]);
 
 const categories = [
-  { name: "Accessories", image: "/images/cat-4.jpg", path: "/accessories" },
-  { name: "Spare Parts", image: "/images/cat-1.jpg", path: "/spare-parts" },
+  { name: "Accessories", image: "/images/cat-4.png", path: "/accessories" },
+  { name: "Spare Parts", image: "/images/cat-1.png", path: "/spare-parts" },
   { name: "Covers", image: "/images/cat-2.jpg", path: "/covers" },
   { name: "All Products", image: "/images/cat-3.jpg", path: "/product" }
 ];
@@ -208,69 +147,80 @@ const categories = [
         </div>
       </div>
 
-      {/* HERO SECTION WITH MULTI-LAYER PARALLAX */}
+      {/* HERO SECTION */}
       <section ref={heroRef} className="hero-section">
-        {/* Layer 1 - Furthest (slowest) - Background gradient/texture */}
-        <div className="parallax-layer parallax-layer-1">
-          <div className="layer-gradient"></div>
-          <div className="layer-pattern"></div>
-        </div>
+        <img
+          src={heroImage}
+          alt="Premium mobile spare parts and accessories"
+          className="hero-image"
+        />
+        <div className="hero-shade" />
 
-        {/* Layer 2 - Mid background */}
-        <div className="parallax-layer parallax-layer-2">
-          <img src={heroImage} alt="mobile accessories wholesale hero" className="layer-image" />
-        </div>
-
-        {/* Layer 3 - Closer (faster) - Text and floating elements */}
-        <div className="parallax-layer parallax-layer-3">
-          <div className="hero-text-ribbon ribbon-top" aria-hidden="true">
-            <div className="hero-marquee-line line-top">
-              <span>NEW STOCK</span>
-              <span>WHOLESALE DEALS</span>
-              <span>MOBILE ACCESSORIES</span>
-              <span>NEW STOCK</span>
-              <span>WHOLESALE DEALS</span>
-            </div>
-          </div>
-          <div className="hero-text-ribbon ribbon-bottom" aria-hidden="true">
-            <div className="hero-marquee-line line-bottom">
-              <span>SPARE PARTS</span>
-              <span>COVERS</span>
-              <span>ACCESSORIES</span>
-              <span>SPARE PARTS</span>
-              <span>COVERS</span>
-            </div>
-          </div>
-          <div className="floating-element" style={{ top: '15%', left: '10%' }}>✦</div>
-          <div className="floating-element" style={{ top: '25%', left: '85%' }}>◇</div>
-          <div className="floating-element" style={{ top: '60%', left: '5%' }}>○</div>
-          <div className="floating-element" style={{ top: '70%', left: '90%' }}>✦</div>
-          <div className="floating-element" style={{ top: '40%', left: '75%' }}>◇</div>
-          <div className="floating-element" style={{ top: '80%', left: '20%' }}>○</div>
-        </div>
-
-        {/* Main overlay */}
-        <div className="hero-overlay" />
-        
-        {/* Hero content */}
         <div className="hero-content">
-          <span className="hero-subtitle">Wholesale Mobile Store</span>
-          <h1>Parts, Covers & Accessories</h1>
-          <p>Bulk mobile products for retailers and repair shops</p>
+          <div className="hero-brand-lockup">
+            <span className="hero-brand-mark">श्री</span>
+            <span className="hero-brand-divider"></span>
+            <span className="hero-brand-name">Shree Mobiles</span>
+          </div>
+
+          <h1>
+            <span>Quality Parts.</span>
+            <span>Trusted Performance.</span>
+          </h1>
+          <p>Your one-stop shop for premium mobile spare parts & accessories.</p>
+
+          <div className="hero-trust-grid" aria-label="Store benefits">
+            <div className="hero-trust-item">
+              <BsShieldCheck />
+              <span>100%<br />Quality Tested</span>
+            </div>
+            <div className="hero-trust-item">
+              <BsAward />
+              <span>Premium<br />Products</span>
+            </div>
+            <div className="hero-trust-item">
+              <BsTruck />
+              <span>Fast & Reliable<br />Delivery</span>
+            </div>
+            <div className="hero-trust-item">
+              <BsHeadset />
+              <span>Dedicated<br />Support</span>
+            </div>
+          </div>
+
           <div className="hero-buttons">
             <Link to="/product" className="hero-btn primary">
+              <BsCart3 />
               Shop Now
             </Link>
-            <Link to="/product" className="hero-btn secondary">
-              View Products
+          </div>
+
+          <div className="hero-category-strip" aria-label="Popular categories">
+            <Link to="/spare-parts">
+              <BsPhone />
+              <span>Display & Touch</span>
+            </Link>
+            <Link to="/spare-parts">
+              <BsBatteryCharging />
+              <span>Batteries</span>
+            </Link>
+            <Link to="/covers">
+              <BsPhone />
+              <span>Covers & Cases</span>
+            </Link>
+            <Link to="/accessories">
+              <BsTruck />
+              <span>Chargers</span>
+            </Link>
+            <Link to="/accessories">
+              <BsHeadset />
+              <span>Headphones</span>
+            </Link>
+            <Link to="/product">
+              <BsThreeDots />
+              <span>& More</span>
             </Link>
           </div>
-        </div>
-        
-        {/* Scroll indicator */}
-        <div className="hero-scroll-indicator">
-          <span>Scroll</span>
-          <div className="scroll-line"></div>
         </div>
       </section>
 
@@ -347,7 +297,7 @@ const categories = [
       <section ref={productsRef} className="product-section">
         <div className="section-header">
           <span className="section-tag">Trending</span>
-          <h2>Featured Products</h2>
+          <h2>New Arrivals</h2>
           <p>Fresh stock for your shop and service counter</p>
         </div>
         

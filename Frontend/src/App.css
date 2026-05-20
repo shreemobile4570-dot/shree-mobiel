@@ -105,18 +105,24 @@ html {
 body {
   font-family: "Rubik", sans-serif;
   background:
-    radial-gradient(circle at 10% 8%, rgba(201, 169, 98, 0.28), transparent 30%),
-    radial-gradient(circle at 88% 14%, rgba(255, 255, 255, 0.75), transparent 28%),
-    radial-gradient(circle at 52% 96%, rgba(219, 202, 170, 0.3), transparent 34%),
-    linear-gradient(135deg, #f8f5ef 0%, #eef3f5 38%, #fbfaf6 72%, #eae3d5 100%);
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+    #f5f5dc;
   background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
-  background: transparent;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+    #f5f5dc;
 }
 
 #smooth-wrapper {
@@ -1946,7 +1952,7 @@ footer .input-group-text {
 }
 
 .header-brand-col {
-  flex: 0 0 190px;
+  flex: 0 0 240px;
 }
 
 .header-search-col {
@@ -1965,10 +1971,11 @@ footer .input-group-text {
   gap: 10px;
   text-decoration: none;
   width: fit-content;
-  padding: 8px 14px;
-  border: 1px solid rgba(201, 169, 98, 0.22);
-  border-radius: var(--glass-radius-sm);
-  background: rgba(255, 255, 255, 0.04);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  white-space: nowrap;
 }
 
 .brand-logo-img {
@@ -1980,11 +1987,11 @@ footer .input-group-text {
 }
 
 .logo-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  font-weight: 400;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 700;
   color: #fff;
-  letter-spacing: 6px;
+  letter-spacing: 0;
   line-height: 1;
 }
 
@@ -2537,7 +2544,7 @@ a.contact-value:hover {
   }
 
   .header-brand-col {
-    flex: 0 0 150px;
+    flex: 0 0 210px;
   }
 
   .header-search-col {
@@ -2671,13 +2678,12 @@ a.contact-value:hover {
   }
 
   .logo-text {
-    font-size: 1.45rem;
-    letter-spacing: 4px;
+    font-size: 1.35rem;
+    letter-spacing: 0;
   }
 
   .brand-logo {
     gap: 8px;
-    padding: 7px 10px;
   }
 
   .brand-logo-img {
@@ -2745,7 +2751,7 @@ a.contact-value:hover {
   }
 
   .brand-logo {
-    max-width: 150px;
+    max-width: none;
   }
 
   .header-actions {
