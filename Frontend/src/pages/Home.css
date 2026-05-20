@@ -696,6 +696,14 @@
   color: var(--accent-gold);
 }
 
+.card-stock {
+  margin: 8px 0 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--secondary-gray);
+}
+
 .card-actions {
   position: absolute;
   bottom: 0;

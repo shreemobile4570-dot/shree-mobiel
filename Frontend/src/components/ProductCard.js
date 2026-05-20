@@ -93,8 +93,8 @@ const ProductCard = (props) => {
 
                 {/* Optional (static or dynamic sizes) */}
                 <div className="a-size">
-                  Available sizes :
-                  <span className="size"> S , M , L , XL</span>
+                  Remaining stock :
+                  <span className="size"> {Number(item?.quantity || 0)} pcs</span>
                 </div>
               </div>
             </div>

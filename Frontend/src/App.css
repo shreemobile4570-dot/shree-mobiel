@@ -1411,6 +1411,16 @@ footer .input-group-text {
   color: var(--secondary-gray);
   font-size: 0.86rem;
 }
+.order-unavailable {
+  display: inline-flex;
+  align-items: center;
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.12);
+  border: 1px solid rgba(180, 35, 24, 0.22);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-weight: 700;
+}
 .order-color {
   display: inline-flex;
   align-items: center;

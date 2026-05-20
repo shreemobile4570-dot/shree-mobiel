@@ -62,7 +62,7 @@ const SingleProduct = () => {
         getAllProducts({
           tag: "popular",
           limit: 8,
-          fields: "title,brand,price,wholesellerPrice,retailerPrice,images,tags",
+          fields: "title,brand,price,wholesellerPrice,retailerPrice,images,tags,quantity",
         })
       );
     }, 250);
@@ -120,14 +120,6 @@ const SingleProduct = () => {
     }
   };
   const orderedProduct = true;
-  const copyToClipboard = (text) => {
-    var textField = document.createElement("textarea");
-    textField.innerText = text;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand("copy");
-    textField.remove();
-  };
 
   const [popularProduct, setPopularProduct] = useState([]);
 
@@ -255,7 +247,11 @@ const SingleProduct = () => {
                 </div>
                 <div className="d-flex gap-10 align-items-center my-2">
                   <h3 className="product-heading">Availablity :</h3>
-                  <p className="product-data">In Stock</p>
+                  <p className="product-data">
+                    {Number(productState?.quantity || 0) > 0
+                      ? `In Stock (${Number(productState?.quantity || 0)} pcs left)`
+                      : "Out of Stock"}
+                  </p>
                 </div>
                 {/* <div className="d-flex gap-10 flex-column mt-2 mb-3">
                   <h3 className="product-heading">Size :</h3>
@@ -369,18 +365,6 @@ const SingleProduct = () => {
                     ship all India domestic orders within
                     <b> 5-10 business days!</b>
                   </p>
-                </div>
-                <div className="d-flex gap-10 align-items-center my-3">
-                  <h3 className="product-heading">Product Link:</h3>
-                  <button
-                    type="button"
-                    className="copy-link-btn"
-                    onClick={() => {
-                      copyToClipboard(window.location.href);
-                    }}
-                  >
-                    Copy Product Link
-                  </button>
                 </div>
               </div>
             </div>

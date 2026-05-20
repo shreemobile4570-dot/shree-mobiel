@@ -57,7 +57,7 @@ const Home = () => {
     dispatch(
       getAllProducts({
         limit: 8,
-        fields: "title,brand,price,wholesellerPrice,retailerPrice,images,createdAt",
+        fields: "title,brand,price,wholesellerPrice,retailerPrice,images,quantity,createdAt",
       })
     );
 
@@ -363,6 +363,7 @@ const categories = [
                   <span className="original-price">₹ {Math.round(displayPrice * 1.3)}</span>
                   <span className="discount">-30%</span>
                 </div>
+                <p className="card-stock">Remaining: {Number(item?.quantity || 0)} pcs</p>
               </div>
               <div className="card-actions">
                 <button className="action-btn">Quick View</button>

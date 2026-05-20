@@ -115,6 +115,11 @@ const Orders = () => {
                         <div className="order-item-meta">
                           <span>Qty: {item?.quantity}</span>
                           <span>Rs. {item?.price}</span>
+                          {item?.isAvailable === false && (
+                            <span className="order-unavailable">
+                              Not available: {item?.availabilityNote || "Currently not available"}
+                            </span>
+                          )}
                           <span>Size: {item?.size?.title || "-"}</span>
                           <span className="order-color">
                             Color:
