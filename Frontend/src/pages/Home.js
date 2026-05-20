@@ -129,8 +129,8 @@ const Home = () => {
   }, [dispatch]);
 
 const categories = [
-  { name: "Accessories", image: "/images/cat-4.png", path: "/accessories" },
-  { name: "Spare Parts", image: "/images/cat-1.png", path: "/spare-parts" },
+  { name: "Accessories", image: "/images/cat-4.jpg", path: "/accessories" },
+  { name: "Spare Parts", image: "/images/cat-1.jpg", path: "/spare-parts" },
   { name: "Covers", image: "/images/cat-2.jpg", path: "/covers" },
   { name: "All Products", image: "/images/cat-3.jpg", path: "/product" }
 ];
