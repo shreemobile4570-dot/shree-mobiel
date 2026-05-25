@@ -1,5 +1,13 @@
 import axios from "axios";
 import { base_url, getAuthConfig, getStoredCustomer } from "../../utils/axiosConfig";
+import {
+  getCachedProduct,
+  getCachedProducts,
+  getProductLastSync,
+  saveProduct,
+  saveProducts,
+  setProductLastSync,
+} from "../../utils/productOfflineDb";
 
 const requireCustomerToken = () => {
   const customer = getStoredCustomer();
@@ -24,42 +32,148 @@ const handleProductAuthError = (error) => {
   throw error;
 };
 
+const isOnline = () => typeof navigator === "undefined" || navigator.onLine;
+
+const normalizeSearchValue = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase();
+
+const asArray = (value) => (Array.isArray(value) ? value : value ? [value] : []);
+
+const matchesProductFilters = (product, filters = {}) => {
+  if (!product) return false;
+
+  if (filters.brand && normalizeSearchValue(product.brand) !== normalizeSearchValue(filters.brand)) {
+    return false;
+  }
+
+  if (filters.tag) {
+    const tags = asArray(product.tags).map(normalizeSearchValue);
+    if (!tags.includes(normalizeSearchValue(filters.tag))) return false;
+  }
+
+  if (filters.category) {
+    const categories = asArray(filters.category).map(normalizeSearchValue);
+    if (!categories.includes(normalizeSearchValue(product.category))) return false;
+  }
+
+  const price = Number(product.price || 0);
+  if (filters.minPrice && price < Number(filters.minPrice)) return false;
+  if (filters.maxPrice && price > Number(filters.maxPrice)) return false;
+
+  return true;
+};
+
+const sortProducts = (products, sort) => {
+  const sortedProducts = [...products];
+
+  if (!sort) {
+    return sortedProducts.sort(
+      (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+    );
+  }
+
+  const sortFields = String(sort).split(",");
+  return sortedProducts.sort((a, b) => {
+    for (const field of sortFields) {
+      const direction = field.startsWith("-") ? -1 : 1;
+      const key = field.replace(/^-/, "");
+      const aValue = a?.[key];
+      const bValue = b?.[key];
+
+      if (aValue === bValue) continue;
+      if (aValue === undefined || aValue === null) return 1;
+      if (bValue === undefined || bValue === null) return -1;
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return (aValue - bValue) * direction;
+      }
+
+      return String(aValue).localeCompare(String(bValue)) * direction;
+    }
+
+    return 0;
+  });
+};
+
+const applyProductQuery = (products = [], filters = {}) => {
+  const page = Math.max(Number(filters.page) || 1, 1);
+  const limit = Math.max(Number(filters.limit) || products.length || 24, 1);
+  const start = (page - 1) * limit;
+
+  return sortProducts(products.filter((product) => matchesProductFilters(product, filters)), filters.sort)
+    .slice(start, start + limit);
+};
+
+const notifyServiceWorkerToCacheImages = (products = []) => {
+  if (typeof navigator === "undefined" || !navigator.serviceWorker?.controller) return;
+
+  const urls = products
+    .flatMap((product) => product?.images || [])
+    .map((image) => image?.url)
+    .filter(Boolean);
+
+  if (urls.length) {
+    navigator.serviceWorker.controller.postMessage({
+      type: "CACHE_PRODUCT_IMAGES",
+      urls,
+    });
+  }
+};
+
+const syncProducts = async () => {
+  const since = await getProductLastSync();
+  const params = new URLSearchParams();
+  if (since) params.append("since", since);
+
+  const response = await axios
+    .get(`${base_url}product/sync?${params.toString()}`, getAuthConfig())
+    .catch(handleProductAuthError);
+
+  const products = response?.data?.products || [];
+  await saveProducts(products);
+  await setProductLastSync(response?.data?.serverTime || new Date().toISOString());
+  notifyServiceWorkerToCacheImages(products);
+
+  return products;
+};
+
 const getProducts = async (data) => {
   if (!requireCustomerToken()) return [];
 
-  const params = new URLSearchParams();
-
-  if (data?.brand) params.append("brand", data.brand);
-  if (data?.tag) params.append("tags", data.tag);
-  if (Array.isArray(data?.category)) {
-    params.append("category", data.category.join(","));
-  } else if (data?.category) {
-    params.append("category", data.category);
+  if (isOnline()) {
+    try {
+      await syncProducts();
+    } catch (error) {
+      if ([401, 403].includes(error?.response?.status)) throw error;
+    }
   }
-  if (data?.minPrice) params.append("price[gte]", data.minPrice);
-  if (data?.maxPrice) params.append("price[lte]", data.maxPrice);
-  if (data?.sort) params.append("sort", data.sort);
-  if (data?.limit) params.append("limit", data.limit);
-  if (data?.page) params.append("page", data.page);
-  if (data?.fields) params.append("fields", data.fields);
 
-  const response = await axios
-    .get(`${base_url}product?${params.toString()}`, getAuthConfig())
-    .catch(handleProductAuthError);
-
-  if (response.data) {
-    return response.data;
-  }
+  const cachedProducts = await getCachedProducts();
+  return applyProductQuery(cachedProducts, data);
 };
 
 const getSingleProduct = async (id) => {
   if (!requireCustomerToken()) return null;
 
-  const response = await axios
-    .get(`${base_url}product/${id}`, getAuthConfig())
-    .catch(handleProductAuthError);
-  if (response.data) {
-    return response.data;
+  if (!isOnline()) {
+    return getCachedProduct(id);
+  }
+
+  try {
+    const response = await axios
+      .get(`${base_url}product/${id}`, getAuthConfig())
+      .catch(handleProductAuthError);
+    if (response.data) {
+      await saveProduct(response.data);
+      notifyServiceWorkerToCacheImages([response.data]);
+      return response.data;
+    }
+  } catch (error) {
+    const cachedProduct = await getCachedProduct(id);
+    if (cachedProduct) return cachedProduct;
+    throw error;
   }
 };
 
