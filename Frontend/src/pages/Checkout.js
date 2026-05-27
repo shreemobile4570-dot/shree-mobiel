@@ -260,7 +260,7 @@ const Checkout = () => {
   return (
     <>
       <LoadingOverlay active={isProcessing} message="Processing order..." />
-      <Container class1="checkout-wrapper checkout-premium py-5 home-wrapper-2" id="smooth-content">
+      <Container class1="checkout-wrapper checkout-premium py-5 home-wrapper-2">
         <div className="checkout-shell">
           <header className="checkout-hero">
             <div>

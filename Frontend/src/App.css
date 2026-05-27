@@ -42,8 +42,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 118px;
+  scroll-behavior: auto;
+  scroll-padding-top: var(--navbar-height);
 }
 .section-heading {
   font-size: 26px;
@@ -118,10 +118,6 @@ body {
 
   html {
     scroll-padding-top: var(--navbar-height) !important;
-  }
-
-  #smooth-content {
-    padding-top: var(--navbar-height) !important;
   }
 
   .premium-header {
@@ -790,12 +786,6 @@ body {
   }
 }
 
-/* Exact fixed-header offset.
-   Header.js measures .site-header-inner and writes --navbar-height at runtime. */
-#smooth-content {
-  padding-top: var(--navbar-height) !important;
-}
-
 html {
   scroll-padding-top: var(--navbar-height) !important;
 }
@@ -1128,10 +1118,6 @@ html {
     scroll-padding-top: var(--navbar-height) !important;
   }
 
-  #smooth-content {
-    padding-top: var(--navbar-height) !important;
-  }
-
   .site-header-inner {
     width: calc(100% - 16px);
     min-height: 56px;
@@ -1148,8 +1134,12 @@ html {
     font-size: 1.05rem;
   }
 
-  .site-brand span {
+  .site-brand > span:not(.site-brand-mark) {
     display: none;
+  }
+
+  .site-brand .site-brand-mark {
+    display: inline-flex;
   }
 
   .site-search-desktop {
@@ -1229,6 +1219,7 @@ html {
   }
 
   .site-brand-mark {
+    display: inline-flex;
     width: 30px;
     height: 30px;
     font-size: 0.98rem;
@@ -1256,12 +1247,6 @@ html {
     width: 14px;
     height: 14px;
   }
-}
-
-/* Exact fixed-header offset.
-   Header.js measures .site-header-inner and writes --navbar-height at runtime. */
-#smooth-content {
-  padding-top: var(--navbar-height) !important;
 }
 
 html {
@@ -1469,10 +1454,6 @@ html {
     scroll-padding-top: var(--navbar-height) !important;
   }
 
-  #smooth-content {
-    padding-top: var(--navbar-height) !important;
-  }
-
   .premium-header {
     min-height: 0 !important;
     background: rgba(19, 25, 33, 0.94) !important;
@@ -1677,16 +1658,11 @@ html {
   background-color: var(--color-f5f5f7);
 }
 
-#smooth-wrapper {
-  overflow: hidden;
-  min-height: 100vh;
-}
-
-#smooth-content {
+.page-shell {
   min-height: 100vh;
   padding-top: var(--navbar-height);
-  will-change: transform;
 }
+
 a {
   text-decoration: none;
   display: inline-block;
@@ -1812,36 +1788,11 @@ button:disabled {
   }
 }
 
-.page-transition {
-  animation: routeFadeIn 420ms cubic-bezier(0.22, 1, 0.36, 1);
-  transform-origin: center top;
-}
-
-@keyframes routeFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-    filter: blur(3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  #smooth-content {
-    transform: none !important;
-  }
-
-  .page-transition {
-    animation: none;
-  }
 }
 /* Header Part */
 
@@ -2809,10 +2760,6 @@ footer .input-group-text {
     --navbar-height: 96px;
   }
 
-  #smooth-content {
-    padding-top: var(--navbar-height);
-  }
-
   .premium-header {
     min-height: 0;
     background: linear-gradient(180deg, rgba(19, 25, 33, 0.96), rgba(19, 25, 33, 0.9));
@@ -3126,10 +3073,6 @@ footer .input-group-text {
 @media (max-width: 768px) {
   :root {
     --navbar-height: 86px;
-  }
-
-  #smooth-content {
-    padding-top: var(--navbar-height);
   }
 
   .premium-header {
@@ -5025,10 +4968,6 @@ a.contact-value:hover {
 
 /* Responsive */
 @media (max-width: 992px) {
-  #smooth-content {
-   padding-top: var(--navbar-height);
-  }
-
   .header-main-row {
     gap: 14px;
   }
@@ -5236,10 +5175,6 @@ a.contact-value:hover {
 }
 
 @media (max-width: 576px) {
-  #smooth-content {
-    padding-top: var(--navbar-height);
-  }
-
   .brand-logo {
     max-width: none;
   }
@@ -6860,10 +6795,6 @@ textarea {
 
   html {
     scroll-padding-top: var(--navbar-height) !important;
-  }
-
-  #smooth-content {
-    padding-top: var(--navbar-height) !important;
   }
 
   .premium-header {
