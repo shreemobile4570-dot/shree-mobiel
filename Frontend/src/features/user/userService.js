@@ -56,15 +56,7 @@ const addToCart = async (cartData) => {
 };
 
 const getCart = async (data) => {
-  const authConfig = data || getAuthConfig();
-  const response = await axios.get(`${base_url}user/cart`, {
-    ...authConfig,
-    headers: {
-      ...(authConfig.headers || {}),
-      "Cache-Control": "no-cache",
-      Pragma: "no-cache",
-    },
-  });
+  const response = await axios.get(`${base_url}user/cart`, data || getAuthConfig());
   if (response.data) {
     return response.data;
   }

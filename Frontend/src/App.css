@@ -898,6 +898,10 @@ html {
   flex: 0 1 330px;
 }
 
+.site-search-mobile-inline {
+  display: none;
+}
+
 .site-search {
   position: relative;
   width: 100%;
@@ -1152,8 +1156,30 @@ html {
     display: none;
   }
 
+  .site-search-mobile-inline {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 92px;
+    max-width: 42vw;
+  }
+
+  .site-search-mobile-inline .site-search-icon {
+    left: 10px;
+    width: 13px;
+    height: 13px;
+  }
+
+  .site-search-mobile-inline .site-search .rbt-input-main,
+  .site-search-mobile-inline .site-search .form-control {
+    min-height: 32px;
+    padding: 6px 10px 6px 30px;
+    font-size: 0.72rem;
+  }
+
   .site-actions {
+    flex: 0 0 auto;
     gap: 5px;
+    margin-left: 0;
   }
 
   .site-icon-link,
@@ -1193,6 +1219,42 @@ html {
   .site-nav-mobile a {
     min-height: 38px;
     font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-header-inner {
+    width: calc(100% - 12px);
+    gap: 5px;
+  }
+
+  .site-brand-mark {
+    width: 30px;
+    height: 30px;
+    font-size: 0.98rem;
+  }
+
+  .site-search-mobile-inline {
+    min-width: 78px;
+    max-width: 38vw;
+  }
+
+  .site-search-mobile-inline .site-search .rbt-input-main,
+  .site-search-mobile-inline .site-search .form-control {
+    min-height: 30px;
+    padding-left: 27px;
+    font-size: 0.66rem;
+  }
+
+  .site-icon-link,
+  .site-menu-button {
+    width: 29px;
+    height: 29px;
+  }
+
+  .site-icon-link img {
+    width: 14px;
+    height: 14px;
   }
 }
 

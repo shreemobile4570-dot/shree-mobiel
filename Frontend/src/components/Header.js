@@ -137,6 +137,9 @@ const Header = () => {
         </nav>
 
         <div className="site-search-desktop">{searchBox("desktop-product-search")}</div>
+        <div className="site-search-mobile-inline">
+          {searchBox("mobile-inline-product-search")}
+        </div>
 
         <div className="site-actions">
           <Link className="site-icon-link" to="/wishlist" aria-label="Wishlist">
