@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { createQuery } from "../features/contact/contactSlice";
 
-const STORE_EMAIL = "rivaacollctn@gmail.com";
+const STORE_EMAIL = "shreemobile4570@gmail.com";
 
 let contactSchema = yup.object({
   name: yup.string().required("Name is Required"),
@@ -69,7 +69,7 @@ const Contact = () => {
           <div className="contact-map-panel">
             <iframe
               title="Shree Mobile store location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121660.28119135296!2d75.80589811180636!3d17.655662324508146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc5d082b54ac5d5%3A0x3c719de6c83710d0!2sSolapur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1777805021893!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d397.5179772137891!2d74.56160820815539!3d16.85444378445714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc119f6a8db2ca7%3A0x5e3cdcc9b2c6764b!2sSHREE%20MOBILE%20ACCESSORIES!5e0!3m2!1sen!2sin!4v1779886763903!5m2!1sen!2sin"
               className="contact-map"
               allowFullScreen=""
               loading="lazy"
@@ -177,7 +177,8 @@ const Contact = () => {
                   <div>
                     <span>Address</span>
                     <address>
-                      Hno : Ashok Chouk, Sakher Peth, Solapur, Maharashtra 413006
+                      Hno : Shop No 4, Main Road, near Stand, Sangli, <br />
+                        Gaon Bhag, Sangli Miraj Kupwad, Maharashtra 416416
                     </address>
                   </div>
                 </li>
@@ -187,7 +188,7 @@ const Contact = () => {
                   </span>
                   <div>
                     <span>Phone</span>
-                    <a href="tel:+918788790703">+91 8788790703</a>
+                    <a href="tel:+919860291048">+91 9860291048</a>
                   </div>
                 </li>
                 <li className="contact-detail-card">

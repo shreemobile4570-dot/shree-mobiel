@@ -119,8 +119,9 @@ const Footer = () => {
                     <div>
                       <p className="contact-label">Address</p>
                       <p className="contact-value">
-                        Daiict College, Reliance Cross Rd,<br />
-                        Gandhinagar, Gujarat 382007
+                        Shop No 4, Main Road, near Stand, Sangli, <br />
+                        Gaon Bhag, Sangli Miraj Kupwad, Maharashtra 416416
+                        
                       </p>
                     </div>
                   </div>
@@ -128,8 +129,8 @@ const Footer = () => {
                     <span className="contact-icon">◈</span>
                     <div>
                       <p className="contact-label">Phone</p>
-                      <a href="tel:+91 8788790703" className="contact-value">
-                        +91 8788790703
+                      <a href="tel:+91 9860291048" className="contact-value">
+                        +91 9860291048
                       </a>
                     </div>
                   </div>
@@ -137,8 +138,8 @@ const Footer = () => {
                     <span className="contact-icon">◈</span>
                     <div>
                       <p className="contact-label">Email</p>
-                      <a href="mailto:rivaacollctn@gmail.com" className="contact-value">
-                        rivaacollctn@gmail.com
+                      <a href="mailto:shreemobile4570@gmail.com" className="contact-value">
+                        shreemobile4570@gmail.com
                       </a>
                     </div>
                   </div>
