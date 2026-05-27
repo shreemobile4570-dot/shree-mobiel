@@ -1,18 +1,11 @@
-const STATIC_CACHE = "shree-mobile-static-v1";
-const IMAGE_CACHE = "shree-mobile-product-images-v1";
-const STATIC_ASSETS = ["/", "/index.html", "/manifest.json"];
+const IMAGE_CACHE = "shree-mobile-product-images-v2";
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open(STATIC_CACHE)
-      .then((cache) => cache.addAll(STATIC_ASSETS))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener("activate", (event) => {
-  const allowedCaches = [STATIC_CACHE, IMAGE_CACHE];
+  const allowedCaches = [IMAGE_CACHE];
 
   event.waitUntil(
     caches
@@ -52,13 +45,6 @@ self.addEventListener("fetch", (event) => {
 
   if (isImageRequest(request)) {
     event.respondWith(fetchAndCacheImage(request));
-    return;
-  }
-
-  if (new URL(request.url).origin === self.location.origin) {
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => cachedResponse || fetch(request))
-    );
   }
 });
 

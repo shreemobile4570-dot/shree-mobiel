@@ -1,3 +1,28 @@
 {
-    "rewrites" :[{"source": "/(.*)" , "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/((?!static/|asset-manifest.json|manifest.json|favicon.ico|logo192.png|logo512.png|service-worker.js).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/service-worker.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
 }
