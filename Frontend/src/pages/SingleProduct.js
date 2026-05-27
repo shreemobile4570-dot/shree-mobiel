@@ -24,14 +24,12 @@ const SingleProduct = () => {
   const [size, setSize] = useState(null);
 
   const [quantity, setQuantity] = useState(1);
-  const [alreadyAdded, setAlreadyAdded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const getProductId = location.pathname.split("/")[2];
   const dispatch = useDispatch();
   const productState = useSelector((state) => state?.product?.singleproduct);
   const productsState = useSelector((state) => state?.product?.product);
-  const cartState = useSelector((state) => state?.auth?.cartProducts);
   const authLoading = useSelector((state) => state?.auth?.isLoading);
   const productLoading = useSelector((state) => state?.product?.isLoading);
   const isLoggedIn = Boolean(getStoredCustomer()?.token);
@@ -93,31 +91,17 @@ const SingleProduct = () => {
     }
   }, [color, productImages]);
 
-  useEffect(() => {
-    setAlreadyAdded(false);
-    for (let index = 0; index < cartState?.length; index++) {
-      if (getProductId === cartState[index]?.productId?._id) {
-        setAlreadyAdded(true);
-      }
-    }
-  }, [cartState, getProductId]);
-
   const uploadCart = async () => {
-    if (color === null) {
-      toast.error("Please choose Color");
-    } else if (productState?.size?.length && size === null) {
-      toast.error("Please choose Size");
-    } else {
-      await dispatch(
-        addProdToCart({
-          productId: productState?._id,
-          quantity,
-          color,
-          size,
-        })
-      );
-      navigate("/cart");
-    }
+    await dispatch(
+      addProdToCart({
+        productId: productState?._id,
+        quantity,
+        color: color || null,
+        size: size || null,
+      })
+    ).unwrap();
+    await dispatch(getUserCart());
+    navigate("/cart");
   };
   const orderedProduct = true;
 
@@ -270,7 +254,7 @@ const SingleProduct = () => {
                     </span>
                   </div>
                 </div> */}
-                {alreadyAdded === false && (
+                {productState?.color?.length > 0 && (
                   <div className="d-flex gap-10 flex-column mt-2 mb-3">
                     <h3 className="product-heading">Color :</h3>
                     <Color
@@ -280,7 +264,7 @@ const SingleProduct = () => {
                     />
                   </div>
                 )}
-                {alreadyAdded === false && productState?.size?.length > 0 && (
+                {productState?.size?.length > 0 && (
                   <div className="d-flex gap-10 flex-column mt-2 mb-3">
                     <h3 className="product-heading">Size :</h3>
                     <div className="d-flex flex-wrap gap-15">
@@ -304,36 +288,24 @@ const SingleProduct = () => {
 
                 <div className="d-flex align-items-center gap-15 flex-row mt-2 mb-3">
                   <h3 className="product-heading">Quantity :</h3>
-                  {alreadyAdded === false && (
-                    <div>
-                      <input
-                        type="number"
-                        min={1}
-                        max={10}
-                        className="form-control"
-                        onChange={(e) => setQuantity(e.target.value)}
-                        value={quantity}
-                      />
-                    </div>
-                  )}
-                  <div
-                    className={
-                      alreadyAdded
-                        ? "ms-0"
-                        : "ms-5 d-flex align-items-center gap-30"
-                    }
-                  >
+                  <div>
+                    <input
+                      type="number"
+                      min={1}
+                      max={10}
+                      className="form-control"
+                      onChange={(e) => setQuantity(e.target.value)}
+                      value={quantity}
+                    />
+                  </div>
+                  <div className="ms-5 d-flex align-items-center gap-30">
                     <button
                       className="button border-0"
-                      // data-bs-toggle="modal"
-                      // data-bs-target="#staticBackdrop"
                       type="button"
                       disabled={authLoading}
-                      onClick={() => {
-                        alreadyAdded ? navigate("/cart") : uploadCart();
-                      }}
+                      onClick={uploadCart}
                     >
-                      {authLoading ? "Adding..." : alreadyAdded ? "Go to Cart" : "Add to Cart "}
+                      {authLoading ? "Adding..." : "Add to Cart"}
                     </button>
                     {/* <button className="button signup">Buy It Now</button> */}
                   </div>

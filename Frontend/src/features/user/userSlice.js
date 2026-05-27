@@ -263,6 +263,7 @@ export const authSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.cartProduct = action.payload;
+        state.cartProducts = null;
         if (state.isSuccess) {
           toast.success("Product Added To Cart");
         }

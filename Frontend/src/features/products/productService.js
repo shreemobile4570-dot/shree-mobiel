@@ -4,12 +4,14 @@ import {
   getCachedProduct,
   getCachedProducts,
   getProductLastSync,
+  removeCachedProduct,
+  replaceProducts,
   saveProduct,
   saveProducts,
   setProductLastSync,
 } from "../../utils/productOfflineDb";
 
-const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
+const PRODUCT_CACHE_TTL = 60 * 1000;
 const PRODUCT_IMAGE_CACHE = "shree-mobile-product-images-v1";
 
 const requireCustomerToken = () => {
@@ -148,12 +150,12 @@ const isProductCacheFresh = async () => {
   return Date.now() - lastSyncTime < PRODUCT_CACHE_TTL;
 };
 
-const syncProducts = async ({ force = false } = {}) => {
+const syncProducts = async ({ force = false, full = false } = {}) => {
   if (!force && (await isProductCacheFresh())) {
     return [];
   }
 
-  const since = await getProductLastSync();
+  const since = full ? "" : await getProductLastSync();
   const params = new URLSearchParams();
   if (since) params.append("since", since);
 
@@ -162,41 +164,15 @@ const syncProducts = async ({ force = false } = {}) => {
     .catch(handleProductAuthError);
 
   const products = response?.data?.products || [];
-  await saveProducts(products);
+  if (full) {
+    await replaceProducts(products);
+  } else {
+    await saveProducts(products);
+  }
   await setProductLastSync(response?.data?.serverTime || new Date().toISOString());
   notifyServiceWorkerToCacheImages(products);
 
   return products;
-};
-
-const refreshProductsInBackground = () => {
-  if (!isOnline()) return;
-
-  syncProducts()
-    .then((products) => {
-      if (products?.length) notifyServiceWorkerToCacheImages(products);
-    })
-    .catch((error) => {
-      if ([401, 403].includes(error?.response?.status)) {
-        handleProductAuthError(error);
-      }
-    });
-};
-
-const refreshSingleProductInBackground = (id) => {
-  if (!isOnline()) return;
-
-  axios
-    .get(`${base_url}product/${id}`, getAuthConfig())
-    .then(async (response) => {
-      if (response.data) {
-        await saveProduct(response.data);
-        notifyServiceWorkerToCacheImages([response.data]);
-      }
-    })
-    .catch((error) => {
-      if ([401, 403].includes(error?.response?.status)) handleProductAuthError(error);
-    });
 };
 
 const cacheKnownProductImages = (products = []) => {
@@ -206,10 +182,17 @@ const cacheKnownProductImages = (products = []) => {
 const getProducts = async (data) => {
   if (!requireCustomerToken()) return [];
 
+  if (isOnline()) {
+    try {
+      await syncProducts({ force: true, full: true });
+    } catch (error) {
+      if ([401, 403].includes(error?.response?.status)) throw error;
+    }
+  }
+
   const cachedProducts = await getCachedProducts();
   if (cachedProducts.length) {
     cacheKnownProductImages(cachedProducts);
-    refreshProductsInBackground();
     return applyProductQuery(cachedProducts, data);
   }
 
@@ -218,7 +201,7 @@ const getProducts = async (data) => {
   }
 
   try {
-    await syncProducts({ force: true });
+    await syncProducts({ force: true, full: true });
   } catch (error) {
     if ([401, 403].includes(error?.response?.status)) throw error;
   }
@@ -229,17 +212,33 @@ const getProducts = async (data) => {
 const getSingleProduct = async (id) => {
   if (!requireCustomerToken()) return null;
 
+  if (isOnline()) {
+    try {
+      const response = await axios
+        .get(`${base_url}product/${id}`, getAuthConfig())
+        .catch(handleProductAuthError);
+      if (response.data) {
+        await saveProduct(response.data);
+        notifyServiceWorkerToCacheImages([response.data]);
+        return response.data;
+      }
+      await removeCachedProduct(id);
+      return null;
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        await removeCachedProduct(id);
+        return null;
+      }
+      const fallbackProduct = await getCachedProduct(id);
+      if (fallbackProduct) return fallbackProduct;
+      throw error;
+    }
+  }
+
   const cachedProduct = await getCachedProduct(id);
   if (cachedProduct) {
     cacheKnownProductImages([cachedProduct]);
-    if (!(await isProductCacheFresh())) {
-      refreshSingleProductInBackground(id);
-    }
     return cachedProduct;
-  }
-
-  if (!isOnline()) {
-    return null;
   }
 
   try {

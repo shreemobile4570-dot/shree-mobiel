@@ -68,7 +68,7 @@ const Checkout = () => {
       items.push({
         product: cartState[index].productId._id,
         quantity: cartState[index].quantity,
-        color: cartState[index].color._id,
+        color: cartState[index].color?._id || null,
         size: cartState[index].size?._id,
         price: cartState[index].price,
       });
@@ -104,7 +104,7 @@ const Checkout = () => {
       orderItems.push({
         product: cartState[index].productId._id,
         quantity: cartState[index].quantity,
-        color: cartState[index].color._id,
+        color: cartState[index].color?._id || null,
         size: cartState[index].size?._id,
         price: cartState[index].price,
       });

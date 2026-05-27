@@ -88,6 +88,32 @@ export const saveProduct = async (product) => {
   await saveProducts([product]);
 };
 
+export const replaceProducts = async (products = []) => {
+  if (!Array.isArray(products)) return;
+
+  try {
+    await runStore(PRODUCT_STORE, "readwrite", (store) => {
+      store.clear();
+      products.forEach((product) => {
+        if (product?._id) store.put(product);
+      });
+      return null;
+    });
+  } catch (error) {
+    // A failed cache refresh should not block live product data.
+  }
+};
+
+export const removeCachedProduct = async (id) => {
+  if (!id) return;
+
+  try {
+    await runStore(PRODUCT_STORE, "readwrite", (store) => store.delete(id));
+  } catch (error) {
+    // Ignore cache cleanup failures.
+  }
+};
+
 export const getProductLastSync = async () => {
   try {
     const meta = await runStore(META_STORE, "readonly", (store) =>

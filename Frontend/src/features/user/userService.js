@@ -56,14 +56,17 @@ const addToCart = async (cartData) => {
 };
 
 const getCart = async (data) => {
-  if (!data) {
-    const cached = getCached("cart");
-    if (cached) return cached;
-  }
-
-  const response = await axios.get(`${base_url}user/cart`, data || getAuthConfig());
+  const authConfig = data || getAuthConfig();
+  const response = await axios.get(`${base_url}user/cart`, {
+    ...authConfig,
+    headers: {
+      ...(authConfig.headers || {}),
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+    },
+  });
   if (response.data) {
-    return data ? response.data : setCached("cart", response.data);
+    return response.data;
   }
 };
 
