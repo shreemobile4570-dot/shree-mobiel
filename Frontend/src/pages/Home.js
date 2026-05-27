@@ -57,21 +57,6 @@ const Home = () => {
     return () => clearTimeout(loadTimer);
   }, [dispatch, isLoggedIn]);
 
-  useEffect(() => {
-    if (!isLoggedIn) return undefined;
-
-    const refreshProducts = () =>
-      dispatch(
-        getAllProducts({
-          limit: 8,
-          fields: "title,brand,price,wholesellerPrice,retailerPrice,images,quantity,createdAt",
-        })
-      );
-
-    const stockRefresh = setInterval(refreshProducts, 15000);
-    return () => clearInterval(stockRefresh);
-  }, [dispatch, isLoggedIn]);
-
 const categorySlug = (name) =>
   name
     .toLowerCase()

@@ -9,6 +9,9 @@ import {
   setProductLastSync,
 } from "../../utils/productOfflineDb";
 
+const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
+const PRODUCT_IMAGE_CACHE = "shree-mobile-product-images-v1";
+
 const requireCustomerToken = () => {
   const customer = getStoredCustomer();
   if (customer?.token) return true;
@@ -107,22 +110,49 @@ const applyProductQuery = (products = [], filters = {}) => {
 };
 
 const notifyServiceWorkerToCacheImages = (products = []) => {
-  if (typeof navigator === "undefined" || !navigator.serviceWorker?.controller) return;
-
   const urls = products
     .flatMap((product) => product?.images || [])
     .map((image) => image?.url)
     .filter(Boolean);
 
-  if (urls.length) {
+  if (!urls.length) return;
+
+  if (typeof navigator !== "undefined" && navigator.serviceWorker?.controller) {
     navigator.serviceWorker.controller.postMessage({
       type: "CACHE_PRODUCT_IMAGES",
       urls,
     });
   }
+
+  if (typeof window !== "undefined" && "caches" in window) {
+    window.caches.open(PRODUCT_IMAGE_CACHE).then((cache) => {
+      urls.forEach((url) => {
+        cache.match(url).then((cachedResponse) => {
+          if (cachedResponse) return;
+          fetch(url, { mode: "no-cors" })
+            .then((response) => cache.put(url, response))
+            .catch(() => null);
+        });
+      });
+    });
+  }
 };
 
-const syncProducts = async () => {
+const isProductCacheFresh = async () => {
+  const lastSync = await getProductLastSync();
+  if (!lastSync) return false;
+
+  const lastSyncTime = new Date(lastSync).getTime();
+  if (Number.isNaN(lastSyncTime)) return false;
+
+  return Date.now() - lastSyncTime < PRODUCT_CACHE_TTL;
+};
+
+const syncProducts = async ({ force = false } = {}) => {
+  if (!force && (await isProductCacheFresh())) {
+    return [];
+  }
+
   const since = await getProductLastSync();
   const params = new URLSearchParams();
   if (since) params.append("since", since);
@@ -139,7 +169,97 @@ const syncProducts = async () => {
   return products;
 };
 
+const refreshProductsInBackground = () => {
+  if (!isOnline()) return;
+
+  syncProducts()
+    .then((products) => {
+      if (products?.length) notifyServiceWorkerToCacheImages(products);
+    })
+    .catch((error) => {
+      if ([401, 403].includes(error?.response?.status)) {
+        handleProductAuthError(error);
+      }
+    });
+};
+
+const refreshSingleProductInBackground = (id) => {
+  if (!isOnline()) return;
+
+  axios
+    .get(`${base_url}product/${id}`, getAuthConfig())
+    .then(async (response) => {
+      if (response.data) {
+        await saveProduct(response.data);
+        notifyServiceWorkerToCacheImages([response.data]);
+      }
+    })
+    .catch((error) => {
+      if ([401, 403].includes(error?.response?.status)) handleProductAuthError(error);
+    });
+};
+
+const cacheKnownProductImages = (products = []) => {
+  notifyServiceWorkerToCacheImages(products);
+};
+
 const getProducts = async (data) => {
+  if (!requireCustomerToken()) return [];
+
+  const cachedProducts = await getCachedProducts();
+  if (cachedProducts.length) {
+    cacheKnownProductImages(cachedProducts);
+    refreshProductsInBackground();
+    return applyProductQuery(cachedProducts, data);
+  }
+
+  if (!isOnline()) {
+    return [];
+  }
+
+  try {
+    await syncProducts({ force: true });
+  } catch (error) {
+    if ([401, 403].includes(error?.response?.status)) throw error;
+  }
+
+  return applyProductQuery(await getCachedProducts(), data);
+};
+
+const getSingleProduct = async (id) => {
+  if (!requireCustomerToken()) return null;
+
+  const cachedProduct = await getCachedProduct(id);
+  if (cachedProduct) {
+    cacheKnownProductImages([cachedProduct]);
+    if (!(await isProductCacheFresh())) {
+      refreshSingleProductInBackground(id);
+    }
+    return cachedProduct;
+  }
+
+  if (!isOnline()) {
+    return null;
+  }
+
+  try {
+    const response = await axios
+      .get(`${base_url}product/${id}`, getAuthConfig())
+      .catch(handleProductAuthError);
+    if (response.data) {
+      await saveProduct(response.data);
+      notifyServiceWorkerToCacheImages([response.data]);
+      return response.data;
+    }
+  } catch (error) {
+    const fallbackProduct = await getCachedProduct(id);
+    if (fallbackProduct) return fallbackProduct;
+    throw error;
+  }
+};
+
+/*
+const getProductsOld = async (data) => {
   if (!requireCustomerToken()) return [];
 
   if (isOnline()) {
@@ -154,7 +274,7 @@ const getProducts = async (data) => {
   return applyProductQuery(cachedProducts, data);
 };
 
-const getSingleProduct = async (id) => {
+const getSingleProductOld = async (id) => {
   if (!requireCustomerToken()) return null;
 
   if (!isOnline()) {
@@ -176,6 +296,7 @@ const getSingleProduct = async (id) => {
     throw error;
   }
 };
+*/
 
 const addToWishlist = async (prodId) => {
   const response = await axios.put(

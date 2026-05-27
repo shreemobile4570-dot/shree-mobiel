@@ -49,8 +49,6 @@ const OurStore = () => {
 
   useEffect(() => {
     getProducts();
-    const stockRefresh = setInterval(getProducts, 15000);
-    return () => clearInterval(stockRefresh);
   }, [getProducts]);
 
   const clearFilters = () => {
