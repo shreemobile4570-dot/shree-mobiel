@@ -13,8 +13,20 @@ root.render(
   </Provider>
 );
 
-if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/service-worker.js").catch(() => {});
   });
+} else if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations?.().then((registrations) => {
+    registrations.forEach((registration) => registration.unregister());
+  });
+
+  if ("caches" in window) {
+    caches.keys().then((cacheNames) => {
+      cacheNames
+        .filter((cacheName) => cacheName.startsWith("shree-mobile-"))
+        .forEach((cacheName) => caches.delete(cacheName));
+    });
+  }
 }
