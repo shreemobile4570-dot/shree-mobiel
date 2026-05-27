@@ -53,9 +53,9 @@ const ProductCard = (props) => {
       return (
         <div
           key={index}
-          className={grid ? `gr-${grid}` : "col-3"}
+          className={`${grid ? `gr-${grid}` : "col-3"} product-list-col`}
         >
-          <div className="el-wrapper position-relative">
+          <div className="el-wrapper product-list-card position-relative">
 
             {/* Wishlist Icon (kept from your logic) */}
             <div className="position-absolute" style={{ top: "10px", right: "10px", zIndex: 2 }}>
@@ -72,15 +72,15 @@ const ProductCard = (props) => {
             </div>
 
             {/* TOP SECTION */}
-            <div className="box-up">
+            <div className="box-up product-list-media">
               <img
                 className="img"
                 src={item?.images[0]?.url}
-                alt="product"
+                alt={item?.title || "product"}
                 onClick={() => navigate("/product/" + item?._id)}
               />
 
-              <div className="img-info">
+              <div className="img-info product-list-info">
                 <div className="info-inner">
                   <span className="p-name">
                     {grid === 12 || grid === 6
@@ -100,7 +100,7 @@ const ProductCard = (props) => {
             </div>
 
             {/* BOTTOM SECTION */}
-            <div className="box-down">
+            <div className="box-down product-list-action">
               <div className="h-bg">
                 <div className="h-bg-inner"></div>
               </div>
@@ -114,6 +114,28 @@ const ProductCard = (props) => {
                 <span className="add-to-cart">
                   <span className="txt">View Product</span>
                 </span>
+              </button>
+            </div>
+
+            <div className="mobile-product-summary">
+              <button
+                type="button"
+                className="mobile-product-title"
+                onClick={() => navigate("/product/" + item?._id)}
+              >
+                {item?.title}
+              </button>
+              <div className="mobile-product-meta">
+                <span>{item?.brand || "Brand"}</span>
+                <span>{Number(item?.quantity || 0)} pcs left</span>
+              </div>
+              <div className="mobile-product-price">₹{displayPrice}</div>
+              <button
+                type="button"
+                className="mobile-product-button"
+                onClick={() => navigate("/product/" + item?._id)}
+              >
+                View Product
               </button>
             </div>
 
