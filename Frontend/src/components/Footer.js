@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <>
       {/* Newsletter Section */}
-      <footer className="premium-newsletter">
+      {/* <footer className="premium-newsletter">
         <div className="container-xxl">
           <div className="row align-items-center">
             <div className="col-5">
@@ -35,7 +35,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      </footer>
+      </footer> */}
 
       {/* Main Footer */}
       <footer className="premium-footer">
