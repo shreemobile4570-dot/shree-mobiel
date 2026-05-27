@@ -3,7 +3,6 @@ import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
 import { Link } from "react-router-dom";
 import Container from "../components/Container";
-import CustomInput from "../components/CustomInput";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,9 +15,46 @@ let signUpSchema = yup.object({
     .string()
     .required("Email is Required")
     .email("Email Should be valid"),
-  mobile: yup.number().required().positive().integer("Mobile No is Required"),
-  password: yup.string().required("Password is Required"),
+  mobile: yup
+    .string()
+    .required("Mobile No is Required")
+    .matches(/^[0-9]{10}$/, "Enter a valid 10 digit mobile number"),
+  password: yup
+    .string()
+    .required("Password is Required")
+    .min(6, "Password must be at least 6 characters"),
+  confirmPassword: yup
+    .string()
+    .required("Confirm Password is Required")
+    .oneOf([yup.ref("password")], "Passwords must match"),
 });
+
+const FloatingField = ({
+  id,
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  onBlur,
+  error,
+  autoComplete,
+}) => (
+  <div className="signup-floating-field">
+    <input
+      type={type}
+      name={name}
+      id={id}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      placeholder=" "
+      autoComplete={autoComplete}
+    />
+    <label htmlFor={id}>{label}</label>
+    <div className="error">{error}</div>
+  </div>
+);
 
 const Signup = () => {
   const authState = useSelector((state) => state.auth);
@@ -30,10 +66,12 @@ const Signup = () => {
       email: "",
       mobile: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: signUpSchema,
     onSubmit: (values) => {
-      dispatch(registerUser(values));
+      const { confirmPassword, ...registerData } = values;
+      dispatch(registerUser(registerData));
     },
   });
 
@@ -47,97 +85,102 @@ const Signup = () => {
     <>
       <Meta title={"Sign Up"} />
       <BreadCrumb title="Sign Up" />
-      <Container class1="login-wrapper py-5 home-wrapper-2">
-        <div className="auth-shell">
-          <div className="auth-intro-panel">
-            <span className="auth-kicker">Shree Mobile</span>
-            <h1>Create Your Account</h1>
-            <p>
-              Join Shree Mobile to save your details, build your wishlist,
-              and order wholesale mobile products with a smoother checkout.
-            </p>
-          </div>
-          <div className="auth-form-panel">
-            <div className="auth-card">
-              <span className="auth-card-label">New Customer</span>
-              <h3>Sign Up</h3>
-              <form
-                action=""
-                className="d-flex flex-column gap-15"
-                onSubmit={formik.handleSubmit}
-              >
-                <CustomInput
-                  type="text"
-                  name="firstname"
-                  placeholder="FirstName"
-                  value={formik.values.firstname}
-                  onChange={formik.handleChange("firstname")}
-                  onBlur={formik.handleBlur("firstname")}
-                />
-                <div className="error">
-                  {formik.touched.firstname && formik.errors.firstname}
-                </div>
-                <CustomInput
-                  type="text"
-                  name="lastname"
-                  placeholder="LastName"
-                  value={formik.values.lastname}
-                  onChange={formik.handleChange("lastname")}
-                  onBlur={formik.handleBlur("lastname")}
-                />
-                <div className="error">
-                  {formik.touched.lastname && formik.errors.lastname}
-                </div>
-                <CustomInput
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
-                />
-                <div className="error">
-                  {formik.touched.email && formik.errors.email}
-                </div>
-                <CustomInput
-                  type="tel"
-                  name="mobile"
-                  placeholder="Mobile Number"
-                  value={formik.values.mobile}
-                  onChange={formik.handleChange("mobile")}
-                  onBlur={formik.handleBlur("mobile")}
-                />
-                <div className="error">
-                  {formik.touched.mobile && formik.errors.mobile}
-                </div>
-                <CustomInput
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange("password")}
-                  onBlur={formik.handleBlur("password")}
-                />
-                <div className="error">
-                  {formik.touched.password && formik.errors.password}
-                </div>
-                <div>
-                  <div className="auth-actions single-action">
-                    <button
-                      className="button border-0"
-                      type="submit"
-                      disabled={authState.isLoading}
-                    >
-                      {authState.isLoading ? "Creating..." : "Sign Up"}
-                    </button>
-                  </div>
-                  <p className="auth-switch-text">
-                    Already have an account? <Link to="/login">Login</Link>
-                  </p>
-                </div>
-              </form>
+      <Container class1="signup-clean-wrapper py-5">
+        <div className="signup-clean-card">
+          <div className="login-clean-head">
+            <span className="login-clean-mark">श्री</span>
+            <div>
+              <p>New Customer</p>
+              <h1>Create Account</h1>
             </div>
           </div>
+
+          <form className="signup-floating-form" onSubmit={formik.handleSubmit}>
+            <div className="signup-field-grid">
+              <FloatingField
+                id="signup-firstname"
+                name="firstname"
+                label="First name"
+                value={formik.values.firstname}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.firstname && formik.errors.firstname}
+                autoComplete="given-name"
+              />
+              <FloatingField
+                id="signup-lastname"
+                name="lastname"
+                label="Last name"
+                value={formik.values.lastname}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.lastname && formik.errors.lastname}
+                autoComplete="family-name"
+              />
+            </div>
+
+            <FloatingField
+              id="signup-email"
+              name="email"
+              type="email"
+              label="Email address"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.email && formik.errors.email}
+              autoComplete="email"
+            />
+
+            <FloatingField
+              id="signup-mobile"
+              name="mobile"
+              type="tel"
+              label="Mobile number"
+              value={formik.values.mobile}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.mobile && formik.errors.mobile}
+              autoComplete="tel"
+            />
+
+            <FloatingField
+              id="signup-password"
+              name="password"
+              type="password"
+              label="Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && formik.errors.password}
+              autoComplete="new-password"
+            />
+
+            <FloatingField
+              id="signup-confirm-password"
+              name="confirmPassword"
+              type="password"
+              label="Confirm password"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.confirmPassword && formik.errors.confirmPassword}
+              autoComplete="new-password"
+            />
+
+            <button
+              className="signup-submit"
+              type="submit"
+              disabled={authState.isLoading && authState.loadingAction === "register"}
+            >
+              {authState.isLoading && authState.loadingAction === "register"
+                ? "Creating..."
+                : "Create Account"}
+            </button>
+
+            <p className="login-switch">
+              Already have an account? <Link to="/login">Login</Link>
+            </p>
+          </form>
         </div>
       </Container>
     </>

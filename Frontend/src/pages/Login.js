@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
 import Container from "../components/Container";
-import CustomInput from "../components/CustomInput";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,68 +45,71 @@ const Login = () => {
       <Meta title={"Login"} />
       <BreadCrumb title="Login" />
 
-      <Container class1="login-wrapper py-5 home-wrapper-2">
-        <div className="auth-shell">
-          <div className="auth-intro-panel">
-            <span className="auth-kicker">Shree Mobile</span>
-            <h1>Welcome Back</h1>
-            <p>
-              Sign in to continue shopping mobile spare parts, accessories,
-              manage your cart, and keep your wishlist close.
-            </p>
-          </div>
-          <div className="auth-form-panel">
-            <div className="auth-card">
-              <span className="auth-card-label">Account Access</span>
-              <h3>Login</h3>
-              <form
-                action=""
-                onSubmit={formik.handleSubmit}
-                className="d-flex flex-column gap-15"
-              >
-                <CustomInput
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
-                />
-                <div className="error">
-                  {formik.touched.email && formik.errors.email}
-                </div>
-                <CustomInput
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange("password")}
-                  onBlur={formik.handleBlur("password")}
-                />
-                <div className="error">
-                  {formik.touched.password && formik.errors.password}
-                </div>
-                <div>
-                  <Link to="/forgot-password" className="auth-helper-link">
-                    Forgot Password?
-                  </Link>
-
-                  <div className="auth-actions">
-                    <button
-                      className="button border-0"
-                      type="submit"
-                      disabled={authState.isLoading}
-                    >
-                      {authState.isLoading ? "Logging in..." : "Login"}
-                    </button>
-                    <Link to="/signup" className="button signup">
-                      SignUp
-                    </Link>
-                  </div>
-                </div>
-              </form>
+      <Container class1="login-wrapper login-clean-wrapper py-5">
+        <div className="login-clean-card">
+          <div className="login-clean-head">
+            <span className="login-clean-mark">श्री</span>
+            <div>
+              <p>Shree Mobiles</p>
+              <h1>Login</h1>
             </div>
           </div>
+
+          <form onSubmit={formik.handleSubmit} className="login-clean-form">
+            <div className="login-field">
+              <label htmlFor="login-email">Your email</label>
+              <input
+                type="email"
+                id="login-email"
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="name@example.com"
+                autoComplete="email"
+              />
+              <div className="error">{formik.touched.email && formik.errors.email}</div>
+            </div>
+
+            <div className="login-field">
+              <label htmlFor="login-password">Your password</label>
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="Enter password"
+                autoComplete="current-password"
+              />
+              <div className="error">
+                {formik.touched.password && formik.errors.password}
+              </div>
+            </div>
+
+            <div className="login-options">
+              <label htmlFor="remember-login">
+                <input id="remember-login" type="checkbox" />
+                <span>Remember me</span>
+              </label>
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </div>
+
+            <button
+              type="submit"
+              className="login-submit"
+              disabled={authState.isLoading && authState.loadingAction === "login"}
+            >
+              {authState.isLoading && authState.loadingAction === "login"
+                ? "Logging in..."
+                : "Login"}
+            </button>
+
+            <p className="login-switch">
+              New to Shree Mobiles? <Link to="/signup">Create account</Link>
+            </p>
+          </form>
         </div>
       </Container>
     </>

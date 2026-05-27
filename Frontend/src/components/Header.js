@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import wishlist from "../images/wishlist.svg";
 import user from "../images/user.svg";
 import cart from "../images/cart.svg";
-import menu from "../images/menu.svg";
-import shreeLogo from "../images/shreelogo.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
@@ -13,17 +11,56 @@ import { getAProduct } from "../features/products/productSlilce";
 import { getuserProductWishlist, getUserCart } from "../features/user/userSlice";
 import { getAuthConfig } from "../utils/axiosConfig";
 
+const navLinks = [
+  { to: "/", label: "Home" },
+  { to: "/product", label: "Shop" },
+  { to: "/new-arrivals", label: "New Arrivals" },
+  { to: "/accessories", label: "Accessories" },
+  { to: "/spare-parts", label: "Spare Parts" },
+  { to: "/covers", label: "Covers" },
+  { to: "/compatibility", label: "Compatibility" },
+  { to: "/contact", label: "Contact" },
+  { to: "/my-orders", label: "My Orders" },
+];
+
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartState = useSelector((state) => state?.auth?.cartProducts);
   const wishlistState = useSelector((state) => state?.auth?.wishlist?.wishlist);
   const authState = useSelector((state) => state?.auth);
-  const [total, setTotal] = useState(null);
-  const [paginate] = useState(true);
   const productState = useSelector((state) => state?.product?.product);
-  const navigate = useNavigate();
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [productOpt, setProductOpt] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [paginate] = useState(true);
+  const headerBarRef = useRef(null);
+
+  useEffect(() => {
+    const setNavbarHeight = () => {
+      if (!headerBarRef.current) return;
+
+      const height = Math.ceil(headerBarRef.current.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--navbar-height", `${height}px`);
+    };
+
+    setNavbarHeight();
+    window.addEventListener("resize", setNavbarHeight);
+
+    const resizeObserver =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(setNavbarHeight)
+        : null;
+
+    if (resizeObserver && headerBarRef.current) {
+      resizeObserver.observe(headerBarRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", setNavbarHeight);
+      resizeObserver?.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (authState?.user) {
@@ -32,212 +69,134 @@ const Header = () => {
     } else {
       setTotal(0);
     }
-    
-    // Scroll listener for header
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, [authState?.user, cartState, dispatch, wishlistState]);
 
-  const [productOpt, setProductOpt] = useState([]);
   useEffect(() => {
-    let sum = 0;
-    for (let index = 0; index < cartState?.length; index++) {
-      sum = sum + Number(cartState[index].quantity) * cartState[index].price;
-    }
+    const sum = (cartState || []).reduce(
+      (amount, item) => amount + Number(item.quantity || 0) * Number(item.price || 0),
+      0
+    );
     setTotal(sum);
   }, [cartState]);
 
   useEffect(() => {
-    let data = [];
-    for (let index = 0; index < productState?.length; index++) {
-      const element = productState[index];
-      data.push({ id: index, prod: element?._id, name: element?.title });
-    }
-    setProductOpt(data);
+    const options = (productState || []).map((item, index) => ({
+      id: index,
+      prod: item?._id,
+      name: item?.title,
+    }));
+    setProductOpt(options);
   }, [productState]);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const handleProductSearch = (selected) => {
+    const productId = selected?.[0]?.prod;
+    if (!productId) return;
+
+    navigate(`/product/${productId}`);
+    dispatch(getAProduct(productId));
+    closeMobileMenu();
+  };
 
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
   };
 
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
+  const searchBox = (id) => (
+    <div className="site-search">
+      <BsSearch className="site-search-icon" />
+      <Typeahead
+        id={id}
+        onChange={handleProductSearch}
+        onPaginate={() => {}}
+        options={productOpt}
+        paginate={paginate}
+        labelKey="name"
+        placeholder="Search products"
+        className="site-search-typeahead"
+      />
+    </div>
+  );
 
   return (
-    <>
-      {/* Top Info Bar */}
-      <div className={`premium-header ${isScrolled ? "scrolled" : ""}`}>
-        {/* <div className="header-top-bar">
-          <div className="container-xxl">
-            <div className="row align-items-center">
-              <div className="col-6">
-                <p className="top-bar-text">
-                  <span className="highlight">Free Shipping</span> on orders above ₹999
-                </p>
-              </div>
-              <div className="col-6">
-                <div className="top-bar-right">
-                  <p className="top-bar-text">
-                    Need Help? 
-                    <a className="contact-link" href="tel:+91 8788790703">
-                      +91 8788790703
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
+    <header className="site-header">
+      <div className="site-header-inner" ref={headerBarRef}>
+        <Link className="site-brand" to="/" onClick={closeMobileMenu}>
+          <span className="site-brand-mark">श्री</span>
+          <span>Shree Mobiles</span>
+        </Link>
 
-        {/* Main Header */}
-        <header className="header-main">
-          <div className="container-xxl">
-            <div className="header-main-row">
-              {/* Logo */}
-              <div className="header-brand-col">
-                <Link className="brand-logo" to="/" onClick={closeMobileMenu}>
-                  <img className="brand-logo-img" src={shreeLogo} alt="Shree Mobiles logo" />
-                  <span className="logo-text">Shree Mobiles</span>
-                </Link>
-              </div>
-
-              {/* Search Bar */}
-              <div className="header-search-col">
-                <div className="premium-search">
-                  <Typeahead
-                    id="pagination-example"
-                    onPaginate={() => {}}
-                    onChange={(selected) => {
-                      navigate(`/product/${selected[0]?.prod}`);
-                      dispatch(getAProduct(selected[0]?.prod));
-                    }}
-                    options={productOpt}
-                    paginate={paginate}
-                    labelKey={"name"}
-                    placeholder="Search for Products..."
-                    className="search-input"
-                  />
-                  <button className="search-btn">
-                    <BsSearch className="fs-6" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Action Icons */}
-              <div className="header-actions-col">
-                <div className="header-actions">
-                  {/* <Link to="/compare-product" className="action-item">
-                    <div className="icon-wrapper">
-                      <img src={compare} alt="compare" />
-                    </div>
-                    <div className="action-label">
-                      <span className="action-title">Compare</span>
-                      <span className="action-sub">Products</span>
-                    </div>
-                  </Link> */}
-                  
-                  <Link to="/wishlist" className="action-item">
-                    <div className="icon-wrapper">
-                      <img src={wishlist} alt="wishlist" />
-                      {wishlistState?.length > 0 && (
-                        <span className="badge-count">{wishlistState.length}</span>
-                      )}
-                    </div>
-                    <div className="action-label">
-                      <span className="action-title">Wishlist</span>
-                      <span className="action-sub">Items</span>
-                    </div>
-                  </Link>
-                  
-                  {authState?.user !== null ? (
-                    <div className="user-dropdown">
-                      <Link to="/my-profile" className="action-item">
-                        <div className="icon-wrapper user-icon">
-                          <img src={user} alt="user" />
-                        </div>
-                        <div className="action-label">
-                          <span className="action-title">Welcome, {authState?.user?.firstname}</span>
-                          <span className="action-sub">Account</span>
-                        </div>
-                      </Link>
-                      <div className="dropdown-menu">
-                        <Link to="/my-profile" className="dropdown-item">
-                          My Profile
-                        </Link>
-                        <Link to="/my-orders" className="dropdown-item">
-                          My Orders
-                        </Link>
-                        <button onClick={handleLogout} className="dropdown-item logout-item">
-                          Logout
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <Link to="/login" className="action-item">
-                      <div className="icon-wrapper user-icon">
-                        <img src={user} alt="user" />
-                      </div>
-                      <div className="action-label">
-                        <span className="action-title">Sign In</span>
-                        <span className="action-sub">Account</span>
-                      </div>
-                    </Link>
-                  )}
-                  
-                  <Link to="/cart" className="action-item cart-item">
-                    <div className="icon-wrapper">
-                      <img src={cart} alt="cart" />
-                      {cartState?.length > 0 && (
-                        <span className="badge-count">{cartState?.length}</span>
-                      )}
-                    </div>
-                    <div className="action-label">
-                      <span className="action-title">₹{total || 0}</span>
-                      <span className="action-sub">Cart</span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Navigation Bar */}
-        <nav className="header-nav">
-          <div className="container-xxl">
-            <div className="nav-content">
-              <button 
-                className="mobile-menu-toggle"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-expanded={mobileMenuOpen}
-                aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-              >
-                <img src={menu} alt="menu" />
-              </button>
-              
-              <ul className={`nav-links ${mobileMenuOpen ? "open" : ""}`}>
-                <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
-                <li><Link to="/product" onClick={closeMobileMenu}>Shop</Link></li>
-                <li><Link to="/new-arrivals" onClick={closeMobileMenu}>New Arrivals</Link></li>
-                <li><Link to="/accessories" onClick={closeMobileMenu}>Accessories</Link></li>
-                <li><Link to="/spare-parts" onClick={closeMobileMenu}>Spare Parts</Link></li>
-                <li><Link to="/covers" onClick={closeMobileMenu}>Covers</Link></li>
-                <li><Link to="/compatibility" onClick={closeMobileMenu}>Compatibility</Link></li>
-                <li><Link to="/contact" onClick={closeMobileMenu}>Contact</Link></li>
-                <li><Link to="/my-orders" onClick={closeMobileMenu}>My Orders</Link></li>
-              </ul>
-
-              
-            </div>
-          </div>
+        <nav className="site-nav-desktop" aria-label="Primary navigation">
+          {navLinks.slice(0, 7).map((item) => (
+            <Link key={item.to} to={item.to}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
+
+        <div className="site-search-desktop">{searchBox("desktop-product-search")}</div>
+
+        <div className="site-actions">
+          <Link className="site-icon-link" to="/wishlist" aria-label="Wishlist">
+            <img src={wishlist} alt="" />
+            {wishlistState?.length > 0 && <span>{wishlistState.length}</span>}
+          </Link>
+
+          {authState?.user ? (
+            <div className="site-account">
+              <Link className="site-icon-link" to="/my-profile" aria-label="Account">
+                <img src={user} alt="" />
+              </Link>
+              <div className="site-account-menu">
+                <Link to="/my-profile">My Profile</Link>
+                <Link to="/my-orders">My Orders</Link>
+                <button type="button" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Link className="site-icon-link" to="/login" aria-label="Login">
+              <img src={user} alt="" />
+            </Link>
+          )}
+
+          <Link className="site-icon-link site-cart-link" to="/cart" aria-label="Cart">
+            <img src={cart} alt="" />
+            {cartState?.length > 0 && <span>{cartState.length}</span>}
+          </Link>
+
+          <button
+            className="site-menu-button"
+            type="button"
+            aria-controls="site-mobile-panel"
+            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen((open) => !open)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
-    </>
+
+      <div
+        id="site-mobile-panel"
+        className={`site-mobile-panel ${mobileMenuOpen ? "open" : ""}`}
+      >
+        <div className="site-search-mobile">{searchBox("mobile-product-search")}</div>
+        <nav className="site-nav-mobile" aria-label="Mobile navigation">
+          {navLinks.map((item) => (
+            <Link key={item.to} to={item.to} onClick={closeMobileMenu}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="site-mobile-total">Cart total: Rs. {total || 0}</div>
+      </div>
+    </header>
   );
 };
 
