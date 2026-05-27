@@ -64,6 +64,10 @@ const Header = () => {
     window.location.reload();
   };
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
       {/* Top Info Bar */}
@@ -96,7 +100,7 @@ const Header = () => {
             <div className="header-main-row">
               {/* Logo */}
               <div className="header-brand-col">
-                <Link className="brand-logo" to="/">
+                <Link className="brand-logo" to="/" onClick={closeMobileMenu}>
                   <img className="brand-logo-img" src={shreeLogo} alt="Shree Mobiles logo" />
                   <span className="logo-text">Shree Mobiles</span>
                 </Link>
@@ -210,19 +214,22 @@ const Header = () => {
               <button 
                 className="mobile-menu-toggle"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-expanded={mobileMenuOpen}
+                aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               >
                 <img src={menu} alt="menu" />
               </button>
               
               <ul className={`nav-links ${mobileMenuOpen ? "open" : ""}`}>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/product">Shop</Link></li>
-                <li><Link to="/new-arrivals">New Arrivals</Link></li>
-                <li><Link to="/accessories">Accessories</Link></li>
-                <li><Link to="/spare-parts">Spare Parts</Link></li>
-                <li><Link to="/covers">Covers</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
-                <li><Link to="/my-orders">My Orders</Link></li>
+                <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
+                <li><Link to="/product" onClick={closeMobileMenu}>Shop</Link></li>
+                <li><Link to="/new-arrivals" onClick={closeMobileMenu}>New Arrivals</Link></li>
+                <li><Link to="/accessories" onClick={closeMobileMenu}>Accessories</Link></li>
+                <li><Link to="/spare-parts" onClick={closeMobileMenu}>Spare Parts</Link></li>
+                <li><Link to="/covers" onClick={closeMobileMenu}>Covers</Link></li>
+                <li><Link to="/compatibility" onClick={closeMobileMenu}>Compatibility</Link></li>
+                <li><Link to="/contact" onClick={closeMobileMenu}>Contact</Link></li>
+                <li><Link to="/my-orders" onClick={closeMobileMenu}>My Orders</Link></li>
               </ul>
 
               

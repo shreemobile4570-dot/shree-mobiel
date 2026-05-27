@@ -78,17 +78,36 @@ const OurStore = () => {
             </button>
           </div>
 
+          {sidebarOpen && (
+            <button
+              type="button"
+              className="filter-backdrop"
+              aria-label="Close filters"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
           <div className="row">
             {/* Filter Sidebar */}
             <div className={`col-lg-3 col-md-4 ${sidebarOpen ? 'sidebar-open' : ''}`}>
               <div className="filter-sidebar">
                 <div className="filter-header">
                   <h3>Filters</h3>
-                  {(tag || category || brand || minPrice || maxPrice) && (
-                    <button className="clear-filters" onClick={clearFilters}>
-                      Clear All
+                  <div className="filter-header-actions">
+                    {(tag || category || brand || minPrice || maxPrice) && (
+                      <button className="clear-filters" onClick={clearFilters}>
+                        Clear All
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="filter-close-btn"
+                      onClick={() => setSidebarOpen(false)}
+                      aria-label="Close filters"
+                    >
+                      ×
                     </button>
-                  )}
+                  </div>
                 </div>
 
                 {/* Category Filter */}

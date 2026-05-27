@@ -30,6 +30,7 @@ import Accessories from "./pages/Accessories";
 import SpareParts from "./pages/SpareParts";
 import Covers from "./pages/Covers";
 import ProductCategory from "./pages/ProductCategory";
+import Compatibility from "./pages/Compatibility";
 
 function App() {
   return (
@@ -77,6 +78,14 @@ function App() {
               element={
                 <PrivateRoutes>
                   <Covers />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="compatibility"
+              element={
+                <PrivateRoutes>
+                  <Compatibility />
                 </PrivateRoutes>
               }
             />
