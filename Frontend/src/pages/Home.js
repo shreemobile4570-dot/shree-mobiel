@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../features/products/productSlilce";
 import {
@@ -35,14 +33,7 @@ import simTrayImage from "../images/simtray.jpg";
 import stripsImage from "../images/volume and power strips.jpg";
 import "./Home.css";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const Home = () => {
-  const heroRef = useRef(null);
-  const categoriesRef = useRef(null);
-  const productsRef = useRef(null);
-  const featuresRef = useRef(null);
-  const newsletterRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
   
   const dispatch = useDispatch();
@@ -52,9 +43,7 @@ const Home = () => {
   const isLoggedIn = Boolean(getStoredCustomer()?.token);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-    // Page load transition
-    setTimeout(() => setIsLoaded(true), 100);
+    const loadTimer = setTimeout(() => setIsLoaded(true), 100);
 
     if (isLoggedIn) {
       dispatch(
@@ -65,88 +54,7 @@ const Home = () => {
       );
     }
 
-    // Hero Content Animation (on load)
-    gsap.fromTo(heroRef.current.querySelectorAll(".hero-content > *"), 
-      { opacity: 0, y: 60 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1.2, 
-        stagger: 0.2,
-        ease: "power3.out",
-        delay: 0.5
-      }
-    );
-
-  // Category Cards Animation
-    gsap.fromTo(".category-card",
-      { opacity: 0, y: 80, scale: 0.9 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: categoriesRef.current,
-          start: "top 80%",
-        }
-      }
-    );
-
-    // Product Cards Animation
-    gsap.fromTo(".premium-card",
-      { opacity: 0, y: 100, rotationX: 15 },
-      {
-        opacity: 1,
-        y: 0,
-        rotationX: 0,
-        duration: 0.9,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: productsRef.current,
-          start: "top 75%",
-        }
-      }
-    );
-
-    // Features Animation
-    gsap.fromTo(".feature-item",
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        stagger: 0.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: featuresRef.current,
-          start: "top 85%",
-        }
-      }
-    );
-
-    // Newsletter Animation
-    gsap.fromTo(newsletterRef.current,
-      { opacity: 0, scale: 0.95 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: newsletterRef.current,
-          start: "top 90%",
-        }
-      }
-    );
-
-    setTimeout(() => ScrollTrigger.refresh(), 500);
-    }, heroRef);
-
-    return () => ctx.revert();
+    return () => clearTimeout(loadTimer);
   }, [dispatch, isLoggedIn]);
 
   useEffect(() => {
@@ -208,7 +116,7 @@ const categories = [
       </div>
 
       {/* HERO SECTION */}
-      <section ref={heroRef} className="hero-section">
+      <section className="hero-section">
         <img
           src={heroImage}
           alt="Premium mobile spare parts and accessories"
@@ -285,7 +193,7 @@ const categories = [
       </section>
 
       {/* FEATURES BAR */}
-      <section ref={featuresRef} className="features-bar">
+      <section className="features-bar">
         <div className="feature-item">
           <span className="feature-icon">✦</span>
           <div>
@@ -317,7 +225,7 @@ const categories = [
       </section>
 
       {/* CATEGORY SECTION */}
-      <section ref={categoriesRef} className="category-section">
+      <section className="category-section">
         <div className="section-header">
           <span className="section-tag">Browse</span>
           <h2>Shop By Category</h2>
@@ -354,7 +262,7 @@ const categories = [
       </section>
 
       {/* PRODUCTS SECTION */}
-      <section ref={productsRef} className="product-section">
+      <section className="product-section">
         <div className="section-header">
           <span className="section-tag">Trending</span>
           <h2>New Arrivals</h2>
@@ -429,7 +337,7 @@ const categories = [
       </section>
 
       {/* NEWSLETTER SECTION */}
-      <section ref={newsletterRef} className="newsletter-section">
+      <section className="newsletter-section">
         <div className="newsletter-content">
           <span className="section-tag">Stay Updated</span>
           <h2>Join Our Newsletter</h2>

@@ -131,16 +131,6 @@ const Header = () => {
               {/* Action Icons */}
               <div className="header-actions-col">
                 <div className="header-actions">
-                  <button
-                    className="mobile-header-menu-button"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    aria-expanded={mobileMenuOpen}
-                    aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-                    type="button"
-                  >
-                    <img src={menu} alt="" />
-                  </button>
-
                   {/* <Link to="/compare-product" className="action-item">
                     <div className="icon-wrapper">
                       <img src={compare} alt="compare" />
